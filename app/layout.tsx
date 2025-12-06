@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "ESPRIT ML Platform",
+  title: "Stratus",
   description: "Student Analytics & Institutional Decision-Making",
 };
 
