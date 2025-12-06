@@ -47,15 +47,15 @@ export default function StudentPortal() {
               <Link
                 key={feature.href}
                 href={feature.href}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border border-gray-200 hover:border-gray-400"
+                className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl hover:shadow-xl transition-all p-6 border border-white/30 hover:border-white/50"
               >
                 <div className={`${feature.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4`}>
                   <Icon className="h-6 w-6" style={{ color: feature.iconColor }} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-200">{feature.description}</p>
               </Link>
             );
           })}

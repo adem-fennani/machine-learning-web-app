@@ -130,11 +130,11 @@ export default function TAEligibility() {
           </p>
         </div>
 
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8 mb-8">
         <form onSubmit={checkEligibility} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-200 mb-2">
                 Current GPA (0.0 - 4.0)
               </label>
               <input
@@ -241,7 +241,7 @@ export default function TAEligibility() {
       </div>
 
       {result && (
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8">
           <div className="text-center mb-8">
             <div
               className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4`}

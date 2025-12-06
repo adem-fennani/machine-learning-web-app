@@ -106,7 +106,7 @@ export default function DropoutRisk() {
         </p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl p-8 mb-8 border border-white/30">
         <form onSubmit={calculateRisk} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
@@ -198,18 +198,18 @@ export default function DropoutRisk() {
       </div>
 
       {result && (
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-white/30">
           <div className="text-center mb-8">
             <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${getRiskColor(result.riskLevel)} mb-4`}>
               {getRiskIcon(result.riskLevel)}
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-white mb-2">
               {result.riskLevel} Risk
             </h2>
-            <p className="text-6xl font-bold text-gray-900 mb-2">
+            <p className="text-6xl font-bold text-white mb-2">
               {result.probability}%
             </p>
-            <p className="text-gray-600">Dropout Probability</p>
+            <p className="text-gray-200">Dropout Probability</p>
           </div>
 
           <div className="mb-6">
@@ -225,7 +225,7 @@ export default function DropoutRisk() {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <h3 className="text-xl font-semibold text-white mb-4">
               Recommendations
             </h3>
             <ul className="space-y-3">
@@ -234,7 +234,7 @@ export default function DropoutRisk() {
                   <span className="inline-block w-6 h-6 bg-red-100 text-center font-semibold text-sm mr-3 mt-0.5" style={{ color: '#b20000' }}>
                     {index + 1}
                   </span>
-                  <span className="text-gray-700">{rec}</span>
+                  <span className="text-gray-200">{rec}</span>
                 </li>
               ))}
             </ul>

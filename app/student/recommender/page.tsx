@@ -176,10 +176,10 @@ export default function ProgramRecommender() {
           </p>
         </div>
 
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8 mb-8">
         <form onSubmit={calculateMatches} className="space-y-8">
           <div>
-            <label className="block text-lg font-semibold text-gray-900 mb-4">
+            <label className="block text-lg font-semibold text-white mb-4">
               What are your interests?
             </label>
             <div className="grid md:grid-cols-3 gap-3">
@@ -202,7 +202,7 @@ export default function ProgramRecommender() {
           </div>
 
           <div>
-            <label className="block text-lg font-semibold text-gray-900 mb-4">
+            <label className="block text-lg font-semibold text-white mb-4">
               What are your strengths?
             </label>
             <div className="grid md:grid-cols-4 gap-3">
@@ -224,7 +224,7 @@ export default function ProgramRecommender() {
           </div>
 
           <div>
-            <label className="block text-lg font-semibold text-gray-900 mb-2">
+            <label className="block text-lg font-semibold text-white mb-2">
               What's your career goal?
             </label>
             <textarea
@@ -252,14 +252,14 @@ export default function ProgramRecommender() {
 
       {showResults && results.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-white mb-6">
             Your Top Program Matches
           </h2>
           <div className="space-y-6">
             {results.map((program, index) => (
               <div
                 key={program.name}
-                className="bg-white rounded-xl shadow-lg p-6 border-l-4"
+                className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-6 border-l-4"
                 style={{
                   borderLeftColor:
                     index === 0
