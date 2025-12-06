@@ -53,16 +53,18 @@ export default function EnrollmentForecasting() {
   } : null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <TrendingUp className="h-10 w-10 text-indigo-600 mr-3" />
-          Enrollment Forecasting
-        </h1>
-        <p className="text-lg text-gray-600">
-          Predict future enrollment trends and plan institutional resources
-        </p>
-      </div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
+            <TrendingUp className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Enrollment Forecasting
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
+            Predict future enrollment trends and plan institutional resources
+          </p>
+        </div>
 
       <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
         <form onSubmit={generateForecast} className="space-y-6">
@@ -78,7 +80,7 @@ export default function EnrollmentForecasting() {
                 max="10"
                 value={years}
                 onChange={(e) => setYears(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
               />
             </div>
 
@@ -89,7 +91,7 @@ export default function EnrollmentForecasting() {
               <select
                 value={selectedProgram}
                 onChange={(e) => setSelectedProgram(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
               >
                 {programs.map((program) => (
                   <option key={program} value={program.toLowerCase().replace(/ /g, "-")}>
@@ -102,7 +104,10 @@ export default function EnrollmentForecasting() {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+            style={{ backgroundColor: '#b20000' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#8a0000'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
           >
             Generate Forecast
           </button>
@@ -125,21 +130,21 @@ export default function EnrollmentForecasting() {
                 <Line
                   type="monotone"
                   dataKey="predicted"
-                  stroke="#6366f1"
+                  stroke="#b20000"
                   strokeWidth={3}
                   name="Predicted Enrollment"
                 />
                 <Line
                   type="monotone"
                   dataKey="lower"
-                  stroke="#93c5fd"
+                  stroke="#9ca3af"
                   strokeDasharray="5 5"
                   name="Lower Bound (90%)"
                 />
                 <Line
                   type="monotone"
                   dataKey="upper"
-                  stroke="#93c5fd"
+                  stroke="#9ca3af"
                   strokeDasharray="5 5"
                   name="Upper Bound (110%)"
                 />
@@ -150,7 +155,7 @@ export default function EnrollmentForecasting() {
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                <Calendar className="h-6 w-6 text-indigo-600 mr-2" />
+                <Calendar className="h-6 w-6 mr-2" style={{ color: '#b20000' }} />
                 Forecast Summary
               </h3>
               <div className="space-y-3">
@@ -162,7 +167,7 @@ export default function EnrollmentForecasting() {
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
                   <span className="text-gray-600">Projected ({forecastData[forecastData.length - 1].year})</span>
-                  <span className="font-bold text-indigo-600">
+                  <span className="font-bold" style={{ color: '#b20000' }}>
                     {forecastData[forecastData.length - 1].predicted.toLocaleString()}
                   </span>
                 </div>
@@ -184,44 +189,44 @@ export default function EnrollmentForecasting() {
             {resourceNeeds && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Building2 className="h-6 w-6 text-indigo-600 mr-2" />
+                  <Building2 className="h-6 w-6 mr-2" style={{ color: '#b20000' }} />
                   Resource Planning
                 </h3>
                 <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">Classrooms Needed</span>
-                      <span className="text-2xl font-bold text-blue-600">
+                      <span className="text-2xl font-bold text-gray-700">
                         {resourceNeeds.classrooms}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">Based on 30 students per classroom</p>
                   </div>
 
-                  <div className="p-4 bg-green-50 rounded-lg">
+                  <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">Faculty Required</span>
-                      <span className="text-2xl font-bold text-green-600">
+                      <span className="text-2xl font-bold text-gray-700">
                         {resourceNeeds.faculty}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">Based on 25:1 student-faculty ratio</p>
                   </div>
 
-                  <div className="p-4 bg-purple-50 rounded-lg">
+                  <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">Housing Units</span>
-                      <span className="text-2xl font-bold text-purple-600">
+                      <span className="text-2xl font-bold text-gray-700">
                         {resourceNeeds.housing}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">Assuming 60% need housing</p>
                   </div>
 
-                  <div className="p-4 bg-yellow-50 rounded-lg">
+                  <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-medium">Scholarship Budget</span>
-                      <span className="text-2xl font-bold text-yellow-600">
+                      <span className="text-2xl font-bold text-gray-700">
                         {resourceNeeds.scholarships}
                       </span>
                     </div>
@@ -272,6 +277,7 @@ export default function EnrollmentForecasting() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }

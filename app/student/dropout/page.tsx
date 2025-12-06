@@ -76,9 +76,9 @@ export default function DropoutRisk() {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "High": return "text-red-600 bg-red-50";
-      case "Medium": return "text-yellow-600 bg-yellow-50";
-      case "Low": return "text-green-600 bg-green-50";
+      case "High": return "bg-red-900/90";
+      case "Medium": return "bg-gray-700/90";
+      case "Low": return "bg-gray-800/90";
       default: return "";
     }
   };
@@ -93,13 +93,15 @@ export default function DropoutRisk() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <AlertCircle className="h-10 w-10 text-red-600 mr-3" />
-          Dropout Risk Calculator
-        </h1>
-        <p className="text-lg text-gray-600">
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2 flex items-center drop-shadow-lg">
+            <AlertCircle className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Dropout Risk Calculator
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
           Get a personalized assessment of your dropout risk using ML prediction
         </p>
       </div>
@@ -188,7 +190,7 @@ export default function DropoutRisk() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors" style={{ backgroundColor: '#b20000' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#8b0000'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
           >
             Calculate Risk
           </button>
@@ -213,14 +215,11 @@ export default function DropoutRisk() {
           <div className="mb-6">
             <div className="w-full bg-gray-200 rounded-full h-4">
               <div
-                className={`h-4 rounded-full transition-all ${
-                  result.riskLevel === "High"
-                    ? "bg-red-600"
-                    : result.riskLevel === "Medium"
-                    ? "bg-yellow-600"
-                    : "bg-green-600"
-                }`}
-                style={{ width: `${result.probability}%` }}
+                className="h-4 rounded-full transition-all"
+                style={{ 
+                  width: `${result.probability}%`,
+                  backgroundColor: result.riskLevel === "High" ? "#b20000" : result.riskLevel === "Medium" ? "#6b7280" : "#374151"
+                }}
               />
             </div>
           </div>
@@ -232,7 +231,7 @@ export default function DropoutRisk() {
             <ul className="space-y-3">
               {result.recommendations.map((rec, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-block w-6 h-6 bg-blue-100 text-blue-600 rounded-full text-center font-semibold text-sm mr-3 mt-0.5">
+                  <span className="inline-block w-6 h-6 bg-red-100 text-center font-semibold text-sm mr-3 mt-0.5" style={{ color: '#b20000' }}>
                     {index + 1}
                   </span>
                   <span className="text-gray-700">{rec}</span>
@@ -242,6 +241,7 @@ export default function DropoutRisk() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

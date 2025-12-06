@@ -163,16 +163,18 @@ export default function ProgramRecommender() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <Brain className="h-10 w-10 text-blue-600 mr-3" />
-          Program Recommender
-        </h1>
-        <p className="text-lg text-gray-600">
-          Discover programs that match your interests and career aspirations
-        </p>
-      </div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
+            <Brain className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Program Recommender
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
+            Discover programs that match your interests and career aspirations
+          </p>
+        </div>
 
       <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
         <form onSubmit={calculateMatches} className="space-y-8">
@@ -188,9 +190,10 @@ export default function ProgramRecommender() {
                   onClick={() => toggleInterest(interest)}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
                     formData.interests.includes(interest)
-                      ? "border-blue-600 bg-blue-50 text-blue-700 font-semibold"
+                      ? "border-gray-700 font-semibold"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
+                  style={formData.interests.includes(interest) ? { backgroundColor: '#b20000', color: 'white' } : {}}
                 >
                   {interest}
                 </button>
@@ -210,7 +213,7 @@ export default function ProgramRecommender() {
                   onClick={() => toggleStrength(strength)}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
                     formData.strengths.includes(strength)
-                      ? "border-green-600 bg-green-50 text-green-700 font-semibold"
+                      ? "border-gray-700 bg-gray-700 text-white font-semibold"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -228,7 +231,7 @@ export default function ProgramRecommender() {
               required
               value={formData.careerGoal}
               onChange={(e) => setFormData({ ...formData, careerGoal: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
               placeholder="Describe your dream job or career path..."
               rows={3}
             />
@@ -236,7 +239,10 @@ export default function ProgramRecommender() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center"
+            style={{ backgroundColor: '#b20000' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#8a0000'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
           >
             <Sparkles className="h-5 w-5 mr-2" />
             Get Recommendations
@@ -257,10 +263,10 @@ export default function ProgramRecommender() {
                 style={{
                   borderLeftColor:
                     index === 0
-                      ? "#2563eb"
+                      ? "#b20000"
                       : index === 1
-                      ? "#3b82f6"
-                      : "#60a5fa",
+                      ? "#d32f2f"
+                      : "#ff5252",
                 }}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -276,7 +282,7 @@ export default function ProgramRecommender() {
                     <p className="text-gray-600 mt-2">{program.description}</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-4xl font-bold text-blue-600">
+                    <div className="text-4xl font-bold" style={{ color: '#b20000' }}>
                       {program.matchPercentage}%
                     </div>
                     <div className="text-sm text-gray-500">Match</div>
@@ -286,8 +292,8 @@ export default function ProgramRecommender() {
                 <div className="mb-4">
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
-                      className="bg-blue-600 h-3 rounded-full transition-all"
-                      style={{ width: `${program.matchPercentage}%` }}
+                      className="h-3 rounded-full transition-all"
+                      style={{ width: `${program.matchPercentage}%`, backgroundColor: '#b20000' }}
                     />
                   </div>
                 </div>
@@ -301,7 +307,7 @@ export default function ProgramRecommender() {
                       {program.strengths.map((strength) => (
                         <span
                           key={strength}
-                          className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+                          className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
                         >
                           {strength}
                         </span>
@@ -324,6 +330,7 @@ export default function ProgramRecommender() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

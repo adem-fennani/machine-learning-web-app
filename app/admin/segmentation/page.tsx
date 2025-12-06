@@ -25,22 +25,24 @@ export default function FinancialSegmentation() {
   const totalRevenue = segmentData.reduce((sum, seg) => sum + (seg.students * seg.avgRevenue), 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <PieChart className="h-10 w-10 text-purple-600 mr-3" />
-          Financial Segmentation Dashboard
-        </h1>
-        <p className="text-lg text-gray-600">
-          Student distribution by financial groups and revenue analytics
-        </p>
-      </div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
+            <PieChart className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Financial Segmentation Dashboard
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
+            Student distribution by financial groups and revenue analytics
+          </p>
+        </div>
 
       {/* Key Metrics */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-2">
-            <Users className="h-8 w-8 text-blue-600" />
+            <Users className="h-8 w-8" style={{ color: '#b20000' }} />
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
             {totalStudents.toLocaleString()}
@@ -50,7 +52,7 @@ export default function FinancialSegmentation() {
 
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="h-8 w-8 text-green-600" />
+            <DollarSign className="h-8 w-8 text-gray-600" />
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
             ${(totalRevenue / 1000000).toFixed(1)}M
@@ -60,7 +62,7 @@ export default function FinancialSegmentation() {
 
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="h-8 w-8 text-purple-600" />
+            <TrendingUp className="h-8 w-8 text-gray-600" />
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
             ${Math.round(totalRevenue / totalStudents).toLocaleString()}
@@ -70,7 +72,7 @@ export default function FinancialSegmentation() {
 
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-2">
-            <Users className="h-8 w-8 text-yellow-600" />
+            <Users className="h-8 w-8 text-gray-600" />
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
             {segmentData.find(s => s.name === "Full Aid")?.value}%
@@ -118,7 +120,7 @@ export default function FinancialSegmentation() {
               <XAxis dataKey="month" />
               <YAxis tickFormatter={(value) => `$${value / 1000000}M`} />
               <Tooltip formatter={(value: number) => `$${value.toLocaleString()}`} />
-              <Bar dataKey="revenue" fill="#8b5cf6" />
+              <Bar dataKey="revenue" fill="#6b7280" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -172,6 +174,7 @@ export default function FinancialSegmentation() {
             </tfoot>
           </table>
         </div>
+      </div>
       </div>
     </div>
   );

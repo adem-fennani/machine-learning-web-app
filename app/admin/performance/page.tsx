@@ -122,16 +122,18 @@ export default function PerformancePrediction() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <Brain className="h-10 w-10 text-blue-600 mr-3" />
-          Performance Prediction
-        </h1>
-        <p className="text-lg text-gray-600">
-          Identify at-risk students and predict academic performance
-        </p>
-      </div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
+            <Brain className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Performance Prediction
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
+            Identify at-risk students and predict academic performance
+          </p>
+        </div>
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
@@ -165,9 +167,10 @@ export default function PerformancePrediction() {
               onClick={() => setFilterPerformance("all")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filterPerformance === "all"
-                  ? "bg-blue-600 text-white"
+                  ? "text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
+              style={filterPerformance === "all" ? { backgroundColor: '#b20000' } : {}}
             >
               All
             </button>
@@ -175,7 +178,7 @@ export default function PerformancePrediction() {
               onClick={() => setFilterPerformance("high")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filterPerformance === "high"
-                  ? "bg-green-600 text-white"
+                  ? "bg-gray-700 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -185,7 +188,7 @@ export default function PerformancePrediction() {
               onClick={() => setFilterPerformance("medium")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filterPerformance === "medium"
-                  ? "bg-yellow-600 text-white"
+                  ? "bg-gray-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -195,9 +198,10 @@ export default function PerformancePrediction() {
               onClick={() => setFilterPerformance("low")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filterPerformance === "low"
-                  ? "bg-red-600 text-white"
+                  ? "text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
+              style={filterPerformance === "low" ? { backgroundColor: '#b20000' } : {}}
             >
               Low
             </button>
@@ -226,40 +230,41 @@ export default function PerformancePrediction() {
                 <div className="text-2xl font-bold text-gray-900">{student.gpa.toFixed(2)}</div>
               </div>
 
-              <div className="p-4 bg-blue-50 rounded-lg">
+              <div className="p-4 rounded-lg" style={{ backgroundColor: '#ffe0e0' }}>
                 <div className="text-sm text-gray-600 mb-1">Predicted GPA</div>
-                <div className="text-2xl font-bold text-blue-600">{student.predictedGPA.toFixed(2)}</div>
+                <div className="text-2xl font-bold" style={{ color: '#b20000' }}>{student.predictedGPA.toFixed(2)}</div>
               </div>
 
-              <div className="p-4 bg-purple-50 rounded-lg">
+              <div className="p-4 bg-gray-100 rounded-lg">
                 <div className="text-sm text-gray-600 mb-1">Confidence</div>
-                <div className="text-2xl font-bold text-purple-600">{student.confidence}%</div>
+                <div className="text-2xl font-bold text-gray-700">{student.confidence}%</div>
               </div>
 
-              <div className="p-4 bg-orange-50 rounded-lg">
+              <div className="p-4 bg-gray-100 rounded-lg">
                 <div className="text-sm text-gray-600 mb-1">At-Risk Courses</div>
-                <div className="text-2xl font-bold text-orange-600">{student.atRiskCourses.length}</div>
+                <div className="text-2xl font-bold text-gray-700">{student.atRiskCourses.length}</div>
               </div>
             </div>
 
             {student.atRiskCourses.length > 0 && (
-              <div className="p-4 bg-red-50 border-l-4 border-red-400 rounded">
-                <h4 className="font-semibold text-red-900 mb-2">⚠️ At-Risk Courses:</h4>
+              <div className="p-4 border-l-4 rounded" style={{ backgroundColor: '#ffe0e0', borderColor: '#b20000' }}>
+                <h4 className="font-semibold mb-2" style={{ color: '#b20000' }}>⚠️ At-Risk Courses:</h4>
                 <div className="flex flex-wrap gap-2">
                   {student.atRiskCourses.map((course, index) => (
                     <span
                       key={index}
-                      className="bg-white text-red-700 px-3 py-1 rounded-full text-sm font-medium border border-red-200"
+                      className="bg-white px-3 py-1 rounded-full text-sm font-medium"
+                      style={{ color: '#b20000', borderColor: '#b20000', border: '1px solid' }}
                     >
                       {course}
                     </span>
                   ))}
                 </div>
                 <div className="mt-3 flex gap-2">
-                  <button className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                  <button className="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors" style={{ backgroundColor: '#b20000' }}>
                     Flag for Intervention
                   </button>
-                  <button className="bg-white text-red-600 border-2 border-red-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors">
+                  <button className="bg-white px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors" style={{ color: '#b20000', borderColor: '#b20000' }}>
                     Contact Advisor
                   </button>
                 </div>
@@ -267,15 +272,16 @@ export default function PerformancePrediction() {
             )}
 
             {student.performance === "High" && (
-              <div className="p-4 bg-green-50 border-l-4 border-green-400 rounded">
-                <h4 className="font-semibold text-green-900 mb-1">✓ Excellent Performance</h4>
-                <p className="text-sm text-green-700">
+              <div className="p-4 bg-gray-100 border-l-4 border-gray-500 rounded">
+                <h4 className="font-semibold text-gray-900 mb-1">✓ Excellent Performance</h4>
+                <p className="text-sm text-gray-700">
                   This student is performing well and shows positive trajectory. Consider for peer tutoring or TA positions.
                 </p>
               </div>
             )}
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

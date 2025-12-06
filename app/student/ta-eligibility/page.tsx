@@ -117,16 +117,18 @@ export default function TAEligibility() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center">
-          <Users className="h-10 w-10 text-green-600 mr-3" />
-          TA Eligibility Checker
-        </h1>
-        <p className="text-lg text-gray-600">
-          Check if you qualify to become a teaching assistant
-        </p>
-      </div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('/background_image.png')" }}>
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
+            <Users className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            TA Eligibility Checker
+          </h1>
+          <p className="text-lg text-white drop-shadow-md">
+            Check if you qualify to become a teaching assistant
+          </p>
+        </div>
 
       <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
         <form onSubmit={checkEligibility} className="space-y-6">
@@ -143,7 +145,7 @@ export default function TAEligibility() {
                 step="0.01"
                 value={formData.gpa}
                 onChange={(e) => setFormData({ ...formData, gpa: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                 placeholder="Enter your GPA"
               />
             </div>
@@ -159,7 +161,7 @@ export default function TAEligibility() {
                 max="200"
                 value={formData.creditsCompleted}
                 onChange={(e) => setFormData({ ...formData, creditsCompleted: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                 placeholder="Total credits"
               />
             </div>
@@ -176,7 +178,7 @@ export default function TAEligibility() {
                 step="0.01"
                 value={formData.courseGrade}
                 onChange={(e) => setFormData({ ...formData, courseGrade: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                 placeholder="Your grade in the course"
               />
             </div>
@@ -189,7 +191,8 @@ export default function TAEligibility() {
                 id="taExperience"
                 checked={formData.hasTAExperience}
                 onChange={(e) => setFormData({ ...formData, hasTAExperience: e.target.checked })}
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
+                style={{ accentColor: '#b20000' }}
               />
               <label htmlFor="taExperience" className="ml-2 block text-sm text-gray-700">
                 I have prior teaching or tutoring experience
@@ -202,7 +205,8 @@ export default function TAEligibility() {
                 id="research"
                 checked={formData.hasResearch}
                 onChange={(e) => setFormData({ ...formData, hasResearch: e.target.checked })}
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
+                style={{ accentColor: '#b20000' }}
               />
               <label htmlFor="research" className="ml-2 block text-sm text-gray-700">
                 I have research experience
@@ -215,7 +219,8 @@ export default function TAEligibility() {
                 id="recommendation"
                 checked={formData.recommendation}
                 onChange={(e) => setFormData({ ...formData, recommendation: e.target.checked })}
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
+                style={{ accentColor: '#b20000' }}
               />
               <label htmlFor="recommendation" className="ml-2 block text-sm text-gray-700">
                 I have a faculty recommendation letter
@@ -225,7 +230,10 @@ export default function TAEligibility() {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+            style={{ backgroundColor: '#b20000' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#8a0000'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
           >
             Check Eligibility
           </button>
@@ -236,11 +244,11 @@ export default function TAEligibility() {
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
             <div
-              className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
-                result.eligible
-                  ? "bg-green-100 text-green-600"
-                  : "bg-red-100 text-red-600"
-              }`}
+              className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4`}
+              style={{
+                backgroundColor: result.eligible ? '#f0f0f0' : '#ffe0e0',
+                color: result.eligible ? '#4a4a4a' : '#b20000'
+              }}
             >
               {result.eligible ? (
                 <CheckCircle className="h-12 w-12" />
@@ -267,10 +275,11 @@ export default function TAEligibility() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-4">
               <div
-                className={`h-4 rounded-full transition-all ${
-                  result.eligible ? "bg-green-600" : "bg-red-600"
-                }`}
-                style={{ width: `${result.probability}%` }}
+                className="h-4 rounded-full transition-all"
+                style={{ 
+                  width: `${result.probability}%`,
+                  backgroundColor: result.eligible ? '#4a4a4a' : '#b20000'
+                }}
               />
             </div>
           </div>
@@ -299,7 +308,7 @@ export default function TAEligibility() {
             <ul className="space-y-3">
               {result.recommendations.map((rec, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-block w-6 h-6 bg-green-100 text-green-600 rounded-full text-center font-semibold text-sm mr-3 mt-0.5">
+                  <span className="inline-block w-6 h-6 bg-gray-200 text-gray-700 rounded-full text-center font-semibold text-sm mr-3 mt-0.5">
                     {index + 1}
                   </span>
                   <span className="text-gray-700">{rec}</span>
@@ -309,6 +318,7 @@ export default function TAEligibility() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

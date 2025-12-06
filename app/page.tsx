@@ -13,24 +13,10 @@ export default function Home() {
           <p className="text-xl text-white mb-8 drop-shadow-md">
             Machine Learning-Powered Student Analytics & Institutional Decision-Making
           </p>
-          <div className="flex justify-center gap-4">
-            <Link
-              href="/student"
-              className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-lg"
-            >
-              Student Portal
-            </Link>
-            <Link
-              href="/admin"
-              className="bg-gray-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-black transition-colors shadow-lg"
-            >
-              Admin Portal
-            </Link>
-          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-white/30 transition-all duration-300 hover:bg-gray-700/50 hover:border-white/50">
+          <Link href="/student" className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-white/30 transition-all duration-300 hover:bg-gray-700/50 hover:border-white/50 cursor-pointer">
             <div className="flex items-center mb-6">
               <GraduationCap className="h-10 w-10 text-white mr-3" style={{ color: '#b20000' }} />
               <h2 className="text-2xl font-bold text-white">Student Portal</h2>
@@ -58,9 +44,9 @@ export default function Home() {
                 </div>
               </li>
             </ul>
-          </div>
+          </Link>
 
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-white/30 transition-all duration-300 hover:bg-gray-700/50 hover:border-white/50">
+          <Link href="/admin" className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-white/30 transition-all duration-300 hover:bg-gray-700/50 hover:border-white/50 cursor-pointer">
             <div className="flex items-center mb-6">
               <LayoutDashboard className="h-10 w-10 text-white mr-3" />
               <h2 className="text-2xl font-bold text-white">Admin Portal</h2>
@@ -88,10 +74,10 @@ export default function Home() {
                 </div>
               </li>
             </ul>
-          </div>
+          </Link>
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 text-center border border-white/30 transition-all duration-300 hover:bg-gray-700/50 hover:border-white/50">
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-2xl p-8 text-center border border-white/30">
           <h3 className="text-xl font-bold text-white mb-4">Powered by Machine Learning</h3>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <span className="bg-white/20 text-white px-4 py-2 rounded-full border border-white/30" style={{ borderColor: '#b20000' }}>K-Neighbors Classifier</span>
