@@ -151,7 +151,7 @@ export default function TAEligibility() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Credits Completed
               </label>
               <input
@@ -167,7 +167,7 @@ export default function TAEligibility() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Grade in Target Course (0.0 - 4.0)
               </label>
               <input
@@ -194,7 +194,7 @@ export default function TAEligibility() {
                 className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
                 style={{ accentColor: '#b20000' }}
               />
-              <label htmlFor="taExperience" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="taExperience" className="ml-2 block text-sm text-white">
                 I have prior teaching or tutoring experience
               </label>
             </div>
@@ -208,7 +208,7 @@ export default function TAEligibility() {
                 className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
                 style={{ accentColor: '#b20000' }}
               />
-              <label htmlFor="research" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="research" className="ml-2 block text-sm text-white">
                 I have research experience
               </label>
             </div>
@@ -222,7 +222,7 @@ export default function TAEligibility() {
                 className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
                 style={{ accentColor: '#b20000' }}
               />
-              <label htmlFor="recommendation" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="recommendation" className="ml-2 block text-sm text-white">
                 I have a faculty recommendation letter
               </label>
             </div>
@@ -256,20 +256,20 @@ export default function TAEligibility() {
                 <XCircle className="h-12 w-12" />
               )}
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-white mb-2">
               {result.eligible ? "Eligible" : "Not Yet Eligible"}
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-white">
               {result.probability}% Match Score
             </p>
           </div>
 
           <div className="mb-8">
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-white">
                 Your Score
               </span>
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-white">
                 {result.score} / {result.maxScore}
               </span>
             </div>
@@ -302,7 +302,7 @@ export default function TAEligibility() {
           )}
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <h3 className="text-lg font-semibold text-white mb-4">
               Recommendations
             </h3>
             <ul className="space-y-3">
@@ -311,7 +311,7 @@ export default function TAEligibility() {
                   <span className="inline-block w-6 h-6 bg-gray-200 text-gray-700 rounded-full text-center font-semibold text-sm mr-3 mt-0.5">
                     {index + 1}
                   </span>
-                  <span className="text-gray-700">{rec}</span>
+                  <span className="text-white">{rec}</span>
                 </li>
               ))}
             </ul>
