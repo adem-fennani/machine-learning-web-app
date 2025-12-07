@@ -275,17 +275,17 @@ export default function ProgramRecommender() {
                       <span className="text-3xl font-bold text-gray-400 mr-3">
                         #{index + 1}
                       </span>
-                      <h3 className="text-2xl font-bold text-gray-900">
+                      <h3 className="text-2xl font-bold text-white">
                         {program.name}
                       </h3>
                     </div>
-                    <p className="text-gray-600 mt-2">{program.description}</p>
+                    <p className="text-white mt-2">{program.description}</p>
                   </div>
                   <div className="text-right">
                     <div className="text-4xl font-bold" style={{ color: '#b20000' }}>
                       {program.matchPercentage}%
                     </div>
-                    <div className="text-sm text-gray-500">Match</div>
+                    <div className="text-sm text-white">Match</div>
                   </div>
                 </div>
 
@@ -300,7 +300,7 @@ export default function ProgramRecommender() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4 className="font-semibold text-white mb-2">
                       Your Relevant Strengths:
                     </h4>
                     <div className="flex flex-wrap gap-2">
@@ -315,10 +315,10 @@ export default function ProgramRecommender() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4 className="font-semibold text-white mb-2">
                       Career Paths:
                     </h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
+                    <ul className="text-sm text-white space-y-1">
                       {program.careerPaths.map((path) => (
                         <li key={path}>• {path}</li>
                       ))}

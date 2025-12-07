@@ -110,7 +110,7 @@ export default function DropoutRisk() {
         <form onSubmit={calculateRisk} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Age
               </label>
               <input
@@ -126,7 +126,7 @@ export default function DropoutRisk() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 GPA (0.0 - 4.0)
               </label>
               <input
@@ -143,7 +143,7 @@ export default function DropoutRisk() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Attendance (%)
               </label>
               <input
@@ -159,7 +159,7 @@ export default function DropoutRisk() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Credits Enrolled
               </label>
               <input
@@ -183,7 +183,7 @@ export default function DropoutRisk() {
               onChange={(e) => setFormData({ ...formData, financialAid: e.target.checked })}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
-            <label htmlFor="financialAid" className="ml-2 block text-sm text-gray-700">
+            <label htmlFor="financialAid" className="ml-2 block text-sm text-white">
               I receive financial aid
             </label>
           </div>
