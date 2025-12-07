@@ -135,11 +135,11 @@ export default function FinancialSegmentation() {
           <table className="w-full">
             <thead>
               <tr className="border-b-2 border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Segment</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Students</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Percentage</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Avg Revenue</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Total Revenue</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-900">Segment</th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">Students</th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">Percentage</th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">Avg Revenue</th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-900">Total Revenue</th>
               </tr>
             </thead>
             <tbody>
@@ -151,20 +151,20 @@ export default function FinancialSegmentation() {
                         className="w-4 h-4 rounded-full mr-3"
                         style={{ backgroundColor: segment.color }}
                       />
-                      <span className="font-medium">{segment.name}</span>
+                      <span className="font-medium text-gray-900">{segment.name}</span>
                     </div>
                   </td>
-                  <td className="text-right py-3 px-4">{segment.students.toLocaleString()}</td>
-                  <td className="text-right py-3 px-4">{segment.value}%</td>
-                  <td className="text-right py-3 px-4">${segment.avgRevenue.toLocaleString()}</td>
-                  <td className="text-right py-3 px-4 font-semibold">
+                  <td className="text-right py-3 px-4 text-gray-900">{segment.students.toLocaleString()}</td>
+                  <td className="text-right py-3 px-4 text-gray-900">{segment.value}%</td>
+                  <td className="text-right py-3 px-4 text-gray-900">${segment.avgRevenue.toLocaleString()}</td>
+                  <td className="text-right py-3 px-4 font-semibold text-gray-900">
                     ${(segment.students * segment.avgRevenue).toLocaleString()}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr className="border-t-2 border-gray-200 font-bold">
+              <tr className="border-t-2 border-gray-200 font-bold text-gray-900">
                 <td className="py-3 px-4">Total</td>
                 <td className="text-right py-3 px-4">{totalStudents.toLocaleString()}</td>
                 <td className="text-right py-3 px-4">100%</td>
