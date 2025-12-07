@@ -70,7 +70,7 @@ export default function EnrollmentForecasting() {
         <form onSubmit={generateForecast} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Forecast Period (Years)
               </label>
               <input
@@ -80,18 +80,18 @@ export default function EnrollmentForecasting() {
                 max="10"
                 value={years}
                 onChange={(e) => setYears(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Program / Department
               </label>
               <select
                 value={selectedProgram}
                 onChange={(e) => setSelectedProgram(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
               >
                 {programs.map((program) => (
                   <option key={program} value={program.toLowerCase().replace(/ /g, "-")}>
@@ -160,26 +160,26 @@ export default function EnrollmentForecasting() {
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b">
-                  <span className="text-gray-600">Current Enrollment</span>
+                  <span className="text-gray-900">Current Enrollment</span>
                   <span className="font-bold text-gray-900">
                     {forecastData[0].predicted.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
-                  <span className="text-gray-600">Projected ({forecastData[forecastData.length - 1].year})</span>
+                  <span className="text-gray-900">Projected ({forecastData[forecastData.length - 1].year})</span>
                   <span className="font-bold" style={{ color: '#b20000' }}>
                     {forecastData[forecastData.length - 1].predicted.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b">
-                  <span className="text-gray-600">Growth Rate</span>
+                  <span className="text-gray-900">Growth Rate</span>
                   <span className="font-bold text-green-600">
                     {(((forecastData[forecastData.length - 1].predicted - forecastData[0].predicted) / forecastData[0].predicted) * 100).toFixed(1)}%
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600">Confidence Interval</span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-gray-900">Confidence Interval</span>
+                  <span className="text-sm text-gray-900">
                     {forecastData[forecastData.length - 1].lower.toLocaleString()} - {forecastData[forecastData.length - 1].upper.toLocaleString()}
                   </span>
                 </div>
@@ -195,42 +195,42 @@ export default function EnrollmentForecasting() {
                 <div className="space-y-4">
                   <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">Classrooms Needed</span>
-                      <span className="text-2xl font-bold text-gray-700">
+                      <span className="text-gray-900 font-medium">Classrooms Needed</span>
+                      <span className="text-2xl font-bold text-gray-900">
                         {resourceNeeds.classrooms}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">Based on 30 students per classroom</p>
+                    <p className="text-sm text-gray-900 mt-1">Based on 30 students per classroom</p>
                   </div>
 
                   <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">Faculty Required</span>
-                      <span className="text-2xl font-bold text-gray-700">
+                      <span className="text-gray-900 font-medium">Faculty Required</span>
+                      <span className="text-2xl font-bold text-gray-900">
                         {resourceNeeds.faculty}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">Based on 25:1 student-faculty ratio</p>
+                    <p className="text-sm text-gray-900 mt-1">Based on 25:1 student-faculty ratio</p>
                   </div>
 
                   <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">Housing Units</span>
-                      <span className="text-2xl font-bold text-gray-700">
+                      <span className="text-gray-900 font-medium">Housing Units</span>
+                      <span className="text-2xl font-bold text-gray-900">
                         {resourceNeeds.housing}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">Assuming 60% need housing</p>
+                    <p className="text-sm text-gray-900 mt-1">Assuming 60% need housing</p>
                   </div>
 
                   <div className="p-4 bg-gray-100 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">Scholarship Budget</span>
-                      <span className="text-2xl font-bold text-gray-700">
+                      <span className="text-gray-900 font-medium">Scholarship Budget</span>
+                      <span className="text-2xl font-bold text-gray-900">
                         {resourceNeeds.scholarships}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">Students needing financial aid (25%)</p>
+                    <p className="text-sm text-gray-900 mt-1">Students needing financial aid (25%)</p>
                   </div>
                 </div>
               </div>
@@ -245,11 +245,11 @@ export default function EnrollmentForecasting() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Year</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Predicted</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Lower Bound</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Upper Bound</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Change</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-900">Year</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-900">Predicted</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-900">Lower Bound</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-900">Upper Bound</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-900">Change</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -259,10 +259,10 @@ export default function EnrollmentForecasting() {
                       : "0.0";
                     return (
                       <tr key={row.year} className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4 font-medium">{row.year}</td>
-                        <td className="text-right py-3 px-4 font-bold">{row.predicted.toLocaleString()}</td>
-                        <td className="text-right py-3 px-4 text-gray-600">{row.lower.toLocaleString()}</td>
-                        <td className="text-right py-3 px-4 text-gray-600">{row.upper.toLocaleString()}</td>
+                        <td className="py-3 px-4 font-medium text-gray-900">{row.year}</td>
+                        <td className="text-right py-3 px-4 font-bold text-gray-900">{row.predicted.toLocaleString()}</td>
+                        <td className="text-right py-3 px-4 text-gray-900">{row.lower.toLocaleString()}</td>
+                        <td className="text-right py-3 px-4 text-gray-900">{row.upper.toLocaleString()}</td>
                         <td className="text-right py-3 px-4">
                           <span className={`${parseFloat(change) >= 0 ? 'text-green-600' : 'text-red-600'} font-semibold`}>
                             {parseFloat(change) > 0 ? '+' : ''}{change}%
