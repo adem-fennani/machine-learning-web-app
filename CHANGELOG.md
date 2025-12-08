@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-12-08
+
+### Changed
+- Switched from US GPA system (0.0-4.0) to Tunisian scoring system (0-20)
+- Updated Dropout Risk Calculator to use average score (0-20) instead of GPA
+- Updated TA Eligibility Checker to use average score (0-20) for both overall and course grades
+- Updated Performance Prediction page to display scores on 0-20 scale
+- Adjusted all scoring thresholds and calculations to reflect Tunisian academic standards
+
 ## [0.1.2] - 2025-12-07
 
 ### Fixed
@@ -43,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Application is in early development stage
 - Not production-ready
 
+[0.1.3]: https://github.com/adem-fennani/machine-learning-web-app/releases/tag/v0.1.3
 [0.1.2]: https://github.com/adem-fennani/machine-learning-web-app/releases/tag/v0.1.2
 [0.1.1]: https://github.com/adem-fennani/machine-learning-web-app/releases/tag/v0.1.1
 [0.1.0]: https://github.com/adem-fennani/machine-learning-web-app/releases/tag/v0.1.0
