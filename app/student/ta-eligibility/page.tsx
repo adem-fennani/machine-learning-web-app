@@ -37,17 +37,17 @@ export default function TAEligibility() {
     const gaps: string[] = [];
     const recommendations: string[] = [];
     
-    // GPA check (30 points)
-    if (gpa >= 3.5) {
+    // GPA check (30 points) - Tunisian scale 0-20
+    if (gpa >= 16) {  // Excellent (equivalent to 3.5+)
       score += 30;
-    } else if (gpa >= 3.0) {
+    } else if (gpa >= 14) {  // Good (equivalent to 3.0+)
       score += 20;
-      gaps.push("GPA below 3.5 (current: " + gpa.toFixed(2) + ")");
-      recommendations.push("Work on improving your GPA to 3.5 or higher");
+      gaps.push("Average score below 16/20 (current: " + gpa.toFixed(2) + "/20)");
+      recommendations.push("Work on improving your average score to 16/20 or higher");
     } else {
       score += 10;
-      gaps.push("GPA must be at least 3.0 (current: " + gpa.toFixed(2) + ")");
-      recommendations.push("Minimum GPA requirement is 3.0");
+      gaps.push("Average score must be at least 14/20 (current: " + gpa.toFixed(2) + "/20)");
+      recommendations.push("Minimum average score requirement is 14/20");
     }
     
     // Credits check (20 points)
@@ -63,17 +63,17 @@ export default function TAEligibility() {
       recommendations.push("You need to complete more coursework");
     }
     
-    // Course grade check (25 points)
-    if (courseGrade >= 3.7) {
+    // Course grade check (25 points) - Tunisian scale 0-20
+    if (courseGrade >= 16) {  // Excellent (equivalent to A)
       score += 25;
-    } else if (courseGrade >= 3.3) {
+    } else if (courseGrade >= 14) {  // Good (equivalent to B+/A-)
       score += 18;
       gaps.push("Course grade could be higher");
-      recommendations.push("Aim for an A (3.7+) in the course you want to TA for");
+      recommendations.push("Aim for an excellent grade (16+/20) in the course you want to TA for");
     } else {
       score += 10;
       gaps.push("Course grade too low for TA position");
-      recommendations.push("You typically need an A- or better in the course");
+      recommendations.push("You typically need a good grade (14+/20) or better in the course");
     }
     
     // Experience (15 points)
@@ -135,18 +135,18 @@ export default function TAEligibility() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-200 mb-2">
-                Current GPA (0.0 - 4.0)
+                Current Average Score (0 - 20)
               </label>
               <input
                 type="number"
                 required
                 min="0"
-                max="4"
+                max="20"
                 step="0.01"
                 value={formData.gpa}
                 onChange={(e) => setFormData({ ...formData, gpa: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                placeholder="Enter your GPA"
+                placeholder="Enter your average score"
               />
             </div>
 
@@ -168,13 +168,13 @@ export default function TAEligibility() {
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                Grade in Target Course (0.0 - 4.0)
+                Grade in Target Course (0 - 20)
               </label>
               <input
                 type="number"
                 required
                 min="0"
-                max="4"
+                max="20"
                 step="0.01"
                 value={formData.courseGrade}
                 onChange={(e) => setFormData({ ...formData, courseGrade: e.target.value })}

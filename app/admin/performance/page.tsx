@@ -6,8 +6,8 @@ import { Brain, AlertTriangle, CheckCircle, TrendingDown } from "lucide-react";
 interface Student {
   id: number;
   name: string;
-  gpa: number;
-  predictedGPA: number;
+  gpa: number;  // Using 0-20 Tunisian scale
+  predictedGPA: number;  // Using 0-20 Tunisian scale
   performance: "High" | "Medium" | "Low";
   atRiskCourses: string[];
   confidence: number;
@@ -21,8 +21,8 @@ export default function PerformancePrediction() {
     {
       id: 1,
       name: "Alice Johnson",
-      gpa: 3.8,
-      predictedGPA: 3.85,
+      gpa: 17.2,  // Tunisian scale: 0-20
+      predictedGPA: 17.5,
       performance: "High",
       atRiskCourses: [],
       confidence: 92,
@@ -30,8 +30,8 @@ export default function PerformancePrediction() {
     {
       id: 2,
       name: "Bob Smith",
-      gpa: 2.9,
-      predictedGPA: 2.6,
+      gpa: 11.8,
+      predictedGPA: 11.0,
       performance: "Low",
       atRiskCourses: ["Calculus II", "Physics I"],
       confidence: 88,
@@ -39,8 +39,8 @@ export default function PerformancePrediction() {
     {
       id: 3,
       name: "Carol Davis",
-      gpa: 3.4,
-      predictedGPA: 3.5,
+      gpa: 15.6,
+      predictedGPA: 16.0,
       performance: "High",
       atRiskCourses: [],
       confidence: 85,
@@ -48,8 +48,8 @@ export default function PerformancePrediction() {
     {
       id: 4,
       name: "David Wilson",
-      gpa: 3.1,
-      predictedGPA: 2.9,
+      gpa: 14.2,
+      predictedGPA: 13.5,
       performance: "Medium",
       atRiskCourses: ["Data Structures"],
       confidence: 79,
@@ -57,8 +57,8 @@ export default function PerformancePrediction() {
     {
       id: 5,
       name: "Emma Brown",
-      gpa: 2.5,
-      predictedGPA: 2.3,
+      gpa: 10.5,
+      predictedGPA: 10.0,
       performance: "Low",
       atRiskCourses: ["Algorithms", "Database Systems", "Operating Systems"],
       confidence: 91,
@@ -66,8 +66,8 @@ export default function PerformancePrediction() {
     {
       id: 6,
       name: "Frank Miller",
-      gpa: 3.6,
-      predictedGPA: 3.7,
+      gpa: 16.4,
+      predictedGPA: 16.8,
       performance: "High",
       atRiskCourses: [],
       confidence: 87,
@@ -75,8 +75,8 @@ export default function PerformancePrediction() {
     {
       id: 7,
       name: "Grace Lee",
-      gpa: 3.0,
-      predictedGPA: 2.8,
+      gpa: 13.8,
+      predictedGPA: 13.0,
       performance: "Medium",
       atRiskCourses: ["Statistics"],
       confidence: 83,
@@ -84,8 +84,8 @@ export default function PerformancePrediction() {
     {
       id: 8,
       name: "Henry Taylor",
-      gpa: 2.7,
-      predictedGPA: 2.5,
+      gpa: 11.2,
+      predictedGPA: 10.8,
       performance: "Low",
       atRiskCourses: ["Linear Algebra", "Discrete Math"],
       confidence: 86,
@@ -226,13 +226,13 @@ export default function PerformancePrediction() {
 
             <div className="grid md:grid-cols-4 gap-6 mb-4">
               <div className="p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-600 mb-1">Current GPA</div>
-                <div className="text-2xl font-bold text-gray-900">{student.gpa.toFixed(2)}</div>
+                <div className="text-sm text-gray-600 mb-1">Current Average</div>
+                <div className="text-2xl font-bold text-gray-900">{student.gpa.toFixed(1)}/20</div>
               </div>
 
               <div className="p-4 rounded-lg" style={{ backgroundColor: '#ffe0e0' }}>
-                <div className="text-sm text-gray-600 mb-1">Predicted GPA</div>
-                <div className="text-2xl font-bold" style={{ color: '#b20000' }}>{student.predictedGPA.toFixed(2)}</div>
+                <div className="text-sm text-gray-600 mb-1">Predicted Average</div>
+                <div className="text-2xl font-bold" style={{ color: '#b20000' }}>{student.predictedGPA.toFixed(1)}/20</div>
               </div>
 
               <div className="p-4 bg-gray-100 rounded-lg">

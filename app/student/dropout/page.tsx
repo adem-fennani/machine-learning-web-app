@@ -28,9 +28,9 @@ export default function DropoutRisk() {
     
     let score = 0;
     
-    // Simple scoring algorithm
-    if (gpa < 2.5) score += 30;
-    else if (gpa < 3.0) score += 15;
+    // Simple scoring algorithm (converted to 0-20 scale)
+    if (gpa < 12) score += 30;  // Below 12/20
+    else if (gpa < 14) score += 15;  // Below 14/20
     
     if (attendance < 70) score += 35;
     else if (attendance < 85) score += 20;
@@ -127,18 +127,18 @@ export default function DropoutRisk() {
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                GPA (0.0 - 4.0)
+                Average Score (0 - 20)
               </label>
               <input
                 type="number"
                 required
                 min="0"
-                max="4"
+                max="20"
                 step="0.01"
                 value={formData.gpa}
                 onChange={(e) => setFormData({ ...formData, gpa: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter your GPA"
+                placeholder="Enter your average score"
               />
             </div>
 
