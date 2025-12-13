@@ -14,7 +14,7 @@ class DropoutPredictionService:
     
     def __init__(self):
         """Initialize the service and load the trained model."""
-        self.model_path = Path(__file__).parent.parent / "models" / "dropout_risk_model(obj1).pkl"
+        self.model_path = Path(__file__).parent.parent / "models" / "dropout_risk_model (1).pkl"
         self.model_data = None
         self._load_model()
     
