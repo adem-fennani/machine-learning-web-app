@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-12-13
+
+### Added
+- **Program Recommendation System**: AI-powered academic program recommendations
+  - Hybrid ML model combining clustering, rule-based logic, and XGBoost classifier
+  - POST `/api/predict/recommend` endpoint with 19 comprehensive features
+  - KMeans clustering (3 clusters) for student segmentation
+  - Intelligent program selection: STEM, Business, or Preparatory
+  - Confidence scoring: High/Medium/Low based on prediction strength
+- **Program Recommendation Features**: Complete student academic profile
+  - Academic metrics: baccalaureate score, previous years average, final average
+  - Skills assessment: communication, technical, and soft skills (0-10 scale)
+  - Career metrics: teaching interest, projects completed, internship duration
+  - Professional development: portfolio, LinkedIn profile, internship completion
+  - Educational context: governorate, baccalaureate type, campus, English level
+  - Scholarship information: status and availability
+- **Program Recommendation UI**: Comprehensive 19-field form interface
+  - Academic score inputs with validation (0-20 scale)
+  - Skills assessment sliders (0-10 scale)
+  - Dropdown selectors for Tunisian governorates, campuses, and English levels
+  - Four checkbox inputs for professional profile completion
+  - Real-time API integration with loading states and error handling
+- **Program Results Display**: Detailed recommendation visualization
+  - Program badge with color coding (STEM: blue, Business: green, Preparatory: purple)
+  - Cluster assignment and confidence level display
+  - Detailed program description and career examples
+  - Student profile analysis: strengths and areas for improvement
+  - Alternative program suggestions based on profile
+  - Personalized explanation for recommendation rationale
+- **Backend Services**: Program recommendation infrastructure
+  - `recommendation_service.py`: ML model with engineered features
+  - Computed features: soft_skill_strength, technical_strength, career_score, academic_strength, global_strength
+  - Rule-based logic: Preparatory (low tech + high academic), Business (high soft skills/cluster 2), STEM (high tech/cluster 1)
+  - ML fallback for edge cases using XGBoost classifier
+  - `recommendation.py` schema: 19-field request model with comprehensive validation
+  - `recommendation.py` router: API endpoint with detailed logging and error handling
+
+### Changed
+- Upgraded scikit-learn from 1.5.2 to 1.6.1 for model compatibility
+- Updated API version to 0.3.0 in main.py
+- Enhanced student portal with program recommendation feature
+- Fixed model loading keys: `classifier`, `preprocess_pipeline`, `kmeans_model`
+
+### Fixed
+- Resolved XGBoost module dependency (added xgboost==2.1.3)
+- Fixed scikit-learn version mismatch warnings
+- Corrected model key references in recommendation service
+- Removed duplicate code in recommender frontend page
+
+### Technical Details
+- Recommendation model: `program_recommendation_model(obj3).pkl`
+- Clustering: 3 clusters for student segmentation (technical, career-oriented, balanced)
+- Features: 19 input fields + 5 engineered features
+- Model pipeline: XGBoost classifier with StandardScaler and OneHotEncoder
+- Dependencies: scikit-learn 1.6.1, xgboost 2.1.3, pandas 2.2.3, numpy 2.1.3
+
 ## [0.3.0] - 2025-12-13
 
 ### Added
