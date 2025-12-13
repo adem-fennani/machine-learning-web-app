@@ -1,28 +1,94 @@
 "use client";
 
-import { PieChart, DollarSign, Users, TrendingUp } from "lucide-react";
-import { PieChart as RePieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { useState } from "react";
+import { Users, Award, GraduationCap, MapPin, Loader2, TrendingUp, CheckCircle } from "lucide-react";
 
-export default function FinancialSegmentation() {
-  // Mock data for financial segments
-  const segmentData = [
-    { name: "Full Pay", value: 35, students: 1200, avgRevenue: 45000, color: "#10b981" },
-    { name: "Partial Aid", value: 40, students: 1370, avgRevenue: 28000, color: "#3b82f6" },
-    { name: "Full Aid", value: 15, students: 515, avgRevenue: 5000, color: "#f59e0b" },
-    { name: "Scholarship", value: 10, students: 343, avgRevenue: 15000, color: "#8b5cf6" },
+interface SegmentationResult {
+  cluster: number;
+  cluster_name: string;
+  scholarship_status: string;
+  baccalaureate_score: number;
+  origin_governorate: string;
+  chosen_program: string;
+  cluster_characteristics: {
+    typical_bac_score_range: string;
+    common_scholarship: string;
+    description: string;
+  };
+}
+
+export default function StudentSegmentation() {
+  const [formData, setFormData] = useState({
+    baccalaureate_score: "",
+    scholarship_status: "",
+    origin_governorate: "",
+    chosen_program: ""
+  });
+  
+  const [result, setResult] = useState<SegmentationResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const scholarshipOptions = ["Full Scholarship", "Partial Scholarship", "Self-Funded"];
+  
+  const governorateOptions = [
+    "Tunis", "Ariana", "Ben Arous", "Manouba", "Nabeul", "Zaghouan", "Bizerte",
+    "Béja", "Jendouba", "Kef", "Siliana", "Sousse", "Monastir", "Mahdia",
+    "Sfax", "Kairouan", "Kasserine", "Sidi Bouzid", "Gabès", "Medenine",
+    "Tataouine", "Gafsa", "Tozeur", "Kebili"
+  ];
+  
+  const programOptions = [
+    "Cybersecurity", "Software Engineering", "Data Science", "AI & Machine Learning",
+    "Business Management", "Finance", "Marketing", "Civil Engineering",
+    "Mechanical Engineering", "Electrical Engineering", "Preparatory Classes",
+    "Computer Networks", "Information Systems"
   ];
 
-  const revenueData = [
-    { month: "Jan", revenue: 4200000 },
-    { month: "Feb", revenue: 3800000 },
-    { month: "Mar", revenue: 4500000 },
-    { month: "Apr", revenue: 3900000 },
-    { month: "May", revenue: 4100000 },
-    { month: "Jun", revenue: 3700000 },
-  ];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setResult(null);
 
-  const totalStudents = segmentData.reduce((sum, seg) => sum + seg.students, 0);
-  const totalRevenue = segmentData.reduce((sum, seg) => sum + (seg.students * seg.avgRevenue), 0);
+    try {
+      const response = await fetch("http://localhost:8000/api/student/segment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          baccalaureate_score: parseFloat(formData.baccalaureate_score),
+          scholarship_status: formData.scholarship_status,
+          origin_governorate: formData.origin_governorate,
+          chosen_program: formData.chosen_program
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get segmentation result");
+      }
+
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getClusterColor = (cluster: number) => {
+    if (cluster === 2) return "#10b981"; // Green for high performer
+    if (cluster === 0) return "#3b82f6"; // Blue for middle tier
+    return "#f59e0b"; // Orange for low academic level
+  };
+
+  const getClusterIcon = (cluster: number) => {
+    if (cluster === 2) return <Award className="h-6 w-6" />;
+    if (cluster === 0) return <TrendingUp className="h-6 w-6" />;
+    return <Users className="h-6 w-6" />;
+  };
 
   return (
     <div className="min-h-screen bg-cover bg-center bg-no-repeat relative bg-fixed" style={{ backgroundImage: "url('/background_image.png')" }}>
@@ -30,151 +96,218 @@ export default function FinancialSegmentation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
-            <PieChart className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
-            Financial Segmentation Dashboard
+            <Users className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
+            Student Segmentation
           </h1>
           <p className="text-lg text-white drop-shadow-md">
-            Student distribution by financial groups and revenue analytics
+            Discover your academic and financial profile cluster
           </p>
         </div>
 
-      {/* Key Metrics */}
-      <div className="grid md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-2">
-            <Users className="h-8 w-8" style={{ color: '#b20000' }} />
-          </div>
-          <div className="text-3xl font-bold text-gray-900 mb-1">
-            {totalStudents.toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-600">Total Students</div>
-        </div>
+      {/* Input Form */}
+      <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Baccalaureate Score */}
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">
+                <GraduationCap className="inline h-5 w-5 mr-2" style={{ color: '#b20000' }} />
+                Baccalaureate Score
+              </label>
+              <input
+                type="number"
+                required
+                min="0"
+                max="20"
+                step="0.01"
+                value={formData.baccalaureate_score}
+                onChange={(e) => setFormData({...formData, baccalaureate_score: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
+                placeholder="e.g., 15.5"
+              />
+              <p className="text-sm text-gray-600 mt-1">Score out of 20</p>
+            </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-2">
-            <DollarSign className="h-8 w-8 text-gray-600" />
-          </div>
-          <div className="text-3xl font-bold text-gray-900 mb-1">
-            ${(totalRevenue / 1000000).toFixed(1)}M
-          </div>
-          <div className="text-sm text-gray-600">Annual Revenue</div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="h-8 w-8 text-gray-600" />
-          </div>
-          <div className="text-3xl font-bold text-gray-900 mb-1">
-            ${Math.round(totalRevenue / totalStudents).toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-600">Avg Revenue/Student</div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-2">
-            <Users className="h-8 w-8 text-gray-600" />
-          </div>
-          <div className="text-3xl font-bold text-gray-900 mb-1">
-            {segmentData.find(s => s.name === "Full Aid")?.value}%
-          </div>
-          <div className="text-sm text-gray-600">Need Financial Aid</div>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Pie Chart */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Student Distribution by Financial Group
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <RePieChart>
-              <Pie
-                data={segmentData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
+            {/* Scholarship Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">
+                <Award className="inline h-5 w-5 mr-2" style={{ color: '#b20000' }} />
+                Scholarship Status
+              </label>
+              <select
+                required
+                value={formData.scholarship_status}
+                onChange={(e) => setFormData({...formData, scholarship_status: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
               >
-                {segmentData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                <option value="">Select scholarship status</option>
+                {scholarshipOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </RePieChart>
-          </ResponsiveContainer>
-        </div>
+              </select>
+            </div>
 
-        {/* Revenue Trend */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Monthly Revenue Trend
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={revenueData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis tickFormatter={(value) => `$${value / 1000000}M`} />
-              <Tooltip formatter={(value: number) => `$${value.toLocaleString()}`} />
-              <Bar dataKey="revenue" fill="#6b7280" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+            {/* Origin Governorate */}
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">
+                <MapPin className="inline h-5 w-5 mr-2" style={{ color: '#b20000' }} />
+                Origin Governorate
+              </label>
+              <select
+                required
+                value={formData.origin_governorate}
+                onChange={(e) => setFormData({...formData, origin_governorate: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
+              >
+                <option value="">Select governorate</option>
+                {governorateOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Chosen Program */}
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">
+                <GraduationCap className="inline h-5 w-5 mr-2" style={{ color: '#b20000' }} />
+                Chosen Program
+              </label>
+              <select
+                required
+                value={formData.chosen_program}
+                onChange={(e) => setFormData({...formData, chosen_program: e.target.value})}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900"
+              >
+                <option value="">Select program</option>
+                {programOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            style={{ backgroundColor: loading ? '#6b7280' : '#b20000' }}
+            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#8a0000')}
+            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#b20000')}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" />
+                Analyzing Profile...
+              </>
+            ) : (
+              "Analyze My Profile"
+            )}
+          </button>
+        </form>
       </div>
 
-      {/* Segment Details Table */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
-          Segment Details
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b-2 border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-900">Segment</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-900">Students</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-900">Percentage</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-900">Avg Revenue</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-900">Total Revenue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {segmentData.map((segment, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4">
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full mr-3"
-                        style={{ backgroundColor: segment.color }}
-                      />
-                      <span className="font-medium text-gray-900">{segment.name}</span>
-                    </div>
-                  </td>
-                  <td className="text-right py-3 px-4 text-gray-900">{segment.students.toLocaleString()}</td>
-                  <td className="text-right py-3 px-4 text-gray-900">{segment.value}%</td>
-                  <td className="text-right py-3 px-4 text-gray-900">${segment.avgRevenue.toLocaleString()}</td>
-                  <td className="text-right py-3 px-4 font-semibold text-gray-900">
-                    ${(segment.students * segment.avgRevenue).toLocaleString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="border-t-2 border-gray-200 font-bold text-gray-900">
-                <td className="py-3 px-4">Total</td>
-                <td className="text-right py-3 px-4">{totalStudents.toLocaleString()}</td>
-                <td className="text-right py-3 px-4">100%</td>
-                <td className="text-right py-3 px-4">-</td>
-                <td className="text-right py-3 px-4">${totalRevenue.toLocaleString()}</td>
-              </tr>
-            </tfoot>
-          </table>
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-8">
+          <p className="font-semibold">Error</p>
+          <p>{error}</p>
         </div>
-      </div>
+      )}
+
+      {/* Results */}
+      {result && (
+        <>
+          {/* Cluster Badge */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div className="text-center mb-6">
+              <div
+                className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
+                style={{ backgroundColor: getClusterColor(result.cluster) + '20' }}
+              >
+                <div style={{ color: getClusterColor(result.cluster) }}>
+                  {getClusterIcon(result.cluster)}
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                {result.cluster_name}
+              </h2>
+              <p className="text-lg text-gray-700">
+                Cluster {result.cluster}
+              </p>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Your Profile</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5" style={{ color: '#b20000' }} />
+                  <div>
+                    <p className="text-sm text-gray-600">Baccalaureate Score</p>
+                    <p className="font-semibold text-gray-900">{result.baccalaureate_score} / 20</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5" style={{ color: '#b20000' }} />
+                  <div>
+                    <p className="text-sm text-gray-600">Scholarship Status</p>
+                    <p className="font-semibold text-gray-900">{result.scholarship_status}</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5" style={{ color: '#b20000' }} />
+                  <div>
+                    <p className="text-sm text-gray-600">Origin Governorate</p>
+                    <p className="font-semibold text-gray-900">{result.origin_governorate}</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5" style={{ color: '#b20000' }} />
+                  <div>
+                    <p className="text-sm text-gray-600">Chosen Program</p>
+                    <p className="font-semibold text-gray-900">{result.chosen_program}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cluster Characteristics */}
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Cluster Characteristics</h3>
+            <div className="space-y-6">
+              <div className="p-6 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
+                <p className="text-gray-700">{result.cluster_characteristics.description}</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="p-6 bg-gray-50 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">Typical Baccalaureate Range</h4>
+                  <p className="text-2xl font-bold" style={{ color: getClusterColor(result.cluster) }}>
+                    {result.cluster_characteristics.typical_bac_score_range}
+                  </p>
+                </div>
+
+                <div className="p-6 bg-gray-50 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">Common Scholarship Type</h4>
+                  <p className="text-2xl font-bold" style={{ color: getClusterColor(result.cluster) }}>
+                    {result.cluster_characteristics.common_scholarship}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-6 bg-blue-50 border-l-4 border-blue-500">
+                <h4 className="font-semibold text-blue-900 mb-2">What This Means</h4>
+                <p className="text-blue-800">
+                  {result.cluster === 2 && "You are part of our top-performing student group! Continue your excellent academic work and take advantage of leadership opportunities."}
+                  {result.cluster === 0 && "You are part of our solid mid-tier student group. Focus on maintaining consistent performance and exploring growth opportunities."}
+                  {result.cluster === 1 && "You have room for academic improvement. Consider seeking tutoring support, study groups, and academic counseling to enhance your performance."}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
       </div>
     </div>
   );
