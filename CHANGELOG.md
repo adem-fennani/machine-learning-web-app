@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-12-13
+
+### Added
+- **Backend Infrastructure**: FastAPI backend with complete ML integration
+  - Python FastAPI application structure with routers, services, and schemas
+  - CORS configuration for frontend-backend communication
+  - Comprehensive error handling and logging
+- **Student Success Prediction**: Full-stack ML model integration
+  - Random Forest Classifier model for predicting student success
+  - POST `/api/predict/success` endpoint with 9 input features
+  - Success probability calculation with confidence levels
+  - Personalized recommendations based on risk factors
+  - Factor analysis (positive, concerns, neutral)
+- **Student Success UI**: Interactive prediction interface
+  - Form with 9 input fields (gender, age, governorate, scores, etc.)
+  - Real-time prediction results with color-coded display
+  - Success/risk probability visualization
+  - Personalized recommendations and actionable insights
+  - Factor breakdown showing strengths and concerns
+- **Student Portal Enhancement**: Added Success Prediction card to student dashboard
+- **Project Configuration**:
+  - Python requirements.txt with ML dependencies (scikit-learn, pandas, numpy)
+  - Backend .gitignore for Python/ML projects
+  - Comprehensive root .gitignore excluding sensitive data
+  - Backend README.md and documentation
+
+### Changed
+- Updated student portal layout to 2x2 grid with 4 feature cards
+- Configured gitignore to track ML model files (.pkl) while excluding training data
+
+### Security
+- Excluded sensitive student data files (cleanedData.csv) from version control
+- Excluded environment variables (.env) and credentials
+- Excluded test scripts and Jupyter notebooks from repository
+
 ## [0.1.3] - 2025-12-08
 
 ### Changed
