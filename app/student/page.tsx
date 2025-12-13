@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertCircle, Brain, Users } from "lucide-react";
+import { AlertCircle, Brain, Users, GraduationCap } from "lucide-react";
 
 export default function StudentPortal() {
   const features = [
@@ -27,6 +27,14 @@ export default function StudentPortal() {
       color: "bg-red-100",
       iconColor: "#b20000",
     },
+    {
+      title: "TA Eligibility Checker",
+      description: "Check your eligibility for Teaching Assistant positions",
+      icon: GraduationCap,
+      href: "/student/ta-eligibility",
+      color: "bg-indigo-100",
+      iconColor: "#4f46e5",
+    },
   ];
 
   return (
@@ -40,7 +48,7 @@ export default function StudentPortal() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
