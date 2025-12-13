@@ -39,3 +39,81 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Data files - NEVER commit actual student data
+*.csv
+*.xlsx
+*.xls
+*.db
+*.sqlite
+*.sqlite3
+cleanedData.csv
+
+# ML Models - Keep models in version control
+# Only ignore temporary/test models
+*.pkl.tmp
+*.joblib.tmp
+# Exclude unused/test models at root
+dropout_risk_model.pkl
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Backend specific
+backend/.env
+backend/notebooks/
+backend/test_*.py
+backend/*.csv
+backend/*.xlsx
+backend/data/
+backend/datasets/
+
+# Package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

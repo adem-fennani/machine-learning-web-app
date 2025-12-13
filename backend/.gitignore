@@ -1,0 +1,30 @@
+# Backend - Python/FastAPI
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+.env
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# ML Models (temporary files only, track actual model files)
+*.pkl.tmp
+*.joblib.tmp
+*.h5
+*.pt
+*.pth
+
+# Data files
+*.csv
+*.xlsx
+*.json
+data/
+datasets/

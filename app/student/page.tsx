@@ -1,8 +1,16 @@
 import Link from "next/link";
-import { AlertCircle, Brain, Users } from "lucide-react";
+import { AlertCircle, Brain, Users, TrendingUp } from "lucide-react";
 
 export default function StudentPortal() {
   const features = [
+    {
+      title: "Success Prediction",
+      description: "Predict your likelihood of academic success based on your profile",
+      icon: TrendingUp,
+      href: "/student/success",
+      color: "bg-green-100",
+      iconColor: "#059669",
+    },
     {
       title: "Dropout Risk Calculator",
       description: "Calculate your dropout risk based on academic and personal factors",
@@ -40,7 +48,7 @@ export default function StudentPortal() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
