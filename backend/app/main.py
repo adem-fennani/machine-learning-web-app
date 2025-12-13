@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import success, dropout
+from app.routers import success, dropout, recommendation
 
 app = FastAPI(
     title="Stratus ML API",
@@ -20,6 +20,7 @@ app.add_middleware(
 # Active routers
 app.include_router(success.router, prefix="/api/predict", tags=["Success Prediction"])
 app.include_router(dropout.router, prefix="/api/predict", tags=["Dropout Prediction"])
+app.include_router(recommendation.router, prefix="/api/predict", tags=["Program Recommendation"])
 
 @app.get("/")
 async def root():
@@ -29,6 +30,7 @@ async def root():
         "endpoints": {
             "success": "/api/predict/success",
             "dropout": "/api/predict/dropout",
+            "recommend": "/api/predict/recommend",
             "docs": "/docs"
         }
     }

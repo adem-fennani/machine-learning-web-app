@@ -1,165 +1,129 @@
 "use client";
 
 import { useState } from "react";
-import { Brain, Sparkles } from "lucide-react";
+import { Brain, Sparkles, Loader2 } from "lucide-react";
 
-interface ProgramMatch {
-  name: string;
-  matchPercentage: number;
-  description: string;
-  strengths: string[];
-  careerPaths: string[];
+interface ProgramRecommendationResult {
+  recommended_program: string;
+  cluster: number;
+  explanation: string;
+  confidence: string;
+  program_details: {
+    name: string;
+    description: string;
+    examples: string;
+    best_for: string;
+  };
+  student_profile: {
+    strengths: string[];
+    areas_for_improvement: string[];
+  };
+  alternative_programs: string[];
 }
 
 export default function ProgramRecommender() {
   const [formData, setFormData] = useState({
-    interests: [] as string[],
-    strengths: [] as string[],
-    careerGoal: "",
+    baccalaureate_score: "",
+    previous_years_average: "",
+    communication_skills_score: "",
+    technical_skills_score: "",
+    soft_skills_score: "",
+    internship_completed: "0",
+    internship_duration_months: "0",
+    projects_completed: "",
+    portfolio_exists: "0",
+    linkedin_profile: "0",
+    teaching_interest: "",
+    final_average: "",
+    has_scholarship: "0",
+    origin_governorate: "",
+    baccalaureate_type: "",
+    scholarship_status: "None",
+    campus: "",
+    registration_status: "Registered",
+    english_level: ""
   });
   
-  const [results, setResults] = useState<ProgramMatch[]>([]);
-  const [showResults, setShowResults] = useState(false);
+  const [result, setResult] = useState<ProgramRecommendationResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const interestOptions = [
-    "Technology & Programming",
-    "Business & Management",
-    "Data Science & Analytics",
-    "Creative Design",
-    "Engineering",
-    "Healthcare",
-    "Education",
-    "Research & Science",
-  ];
-
-  const strengthOptions = [
-    "Problem Solving",
-    "Communication",
-    "Leadership",
-    "Analytical Thinking",
-    "Creativity",
-    "Technical Skills",
-    "Teamwork",
-    "Mathematics",
-  ];
-
-  const programs = [
-    {
-      name: "Computer Science",
-      keywords: ["technology", "programming", "technical", "problem solving", "analytical"],
-      description: "Build software, algorithms, and cutting-edge technology solutions",
-      careerPaths: ["Software Engineer", "Data Scientist", "Systems Architect", "AI Specialist"],
-    },
-    {
-      name: "Business Administration",
-      keywords: ["business", "management", "leadership", "communication"],
-      description: "Develop business strategy, management, and entrepreneurial skills",
-      careerPaths: ["Business Analyst", "Project Manager", "Consultant", "Entrepreneur"],
-    },
-    {
-      name: "Data Analytics",
-      keywords: ["data", "analytics", "analytical", "mathematics", "technical"],
-      description: "Analyze complex data to drive business insights and decisions",
-      careerPaths: ["Data Analyst", "Business Intelligence Analyst", "Analytics Consultant"],
-    },
-    {
-      name: "Graphic Design",
-      keywords: ["creative", "design", "communication", "creativity"],
-      description: "Create visual content for digital and print media",
-      careerPaths: ["UI/UX Designer", "Brand Designer", "Creative Director", "Art Director"],
-    },
-    {
-      name: "Software Engineering",
-      keywords: ["technology", "programming", "engineering", "problem solving", "technical"],
-      description: "Design and develop scalable software systems and applications",
-      careerPaths: ["Full-Stack Developer", "DevOps Engineer", "Solutions Architect"],
-    },
-    {
-      name: "Marketing",
-      keywords: ["business", "communication", "creativity", "analytical"],
-      description: "Develop strategies to promote products and build brand awareness",
-      careerPaths: ["Marketing Manager", "Digital Marketing Specialist", "Brand Strategist"],
-    },
-    {
-      name: "Cybersecurity",
-      keywords: ["technology", "technical", "problem solving", "analytical"],
-      description: "Protect systems and networks from digital threats and attacks",
-      careerPaths: ["Security Analyst", "Penetration Tester", "Security Architect"],
-    },
-    {
-      name: "Finance",
-      keywords: ["business", "analytical", "mathematics", "problem solving"],
-      description: "Manage financial planning, investments, and risk assessment",
-      careerPaths: ["Financial Analyst", "Investment Banker", "Risk Manager"],
-    },
-  ];
-
-  const toggleInterest = (interest: string) => {
-    if (formData.interests.includes(interest)) {
-      setFormData({
-        ...formData,
-        interests: formData.interests.filter((i) => i !== interest),
-      });
-    } else {
-      setFormData({
-        ...formData,
-        interests: [...formData.interests, interest],
-      });
-    }
-  };
-
-  const toggleStrength = (strength: string) => {
-    if (formData.strengths.includes(strength)) {
-      setFormData({
-        ...formData,
-        strengths: formData.strengths.filter((s) => s !== strength),
-      });
-    } else {
-      setFormData({
-        ...formData,
-        strengths: [...formData.strengths, strength],
-      });
-    }
-  };
-
-  const calculateMatches = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Mock ML recommendation logic
-    const userKeywords = [
-      ...formData.interests.map(i => i.toLowerCase()),
-      ...formData.strengths.map(s => s.toLowerCase()),
-      formData.careerGoal.toLowerCase(),
-    ].join(" ");
+    setLoading(true);
+    setError("");
+    setResult(null);
 
-    const matches = programs.map((program) => {
-      let score = 0;
-      
-      program.keywords.forEach((keyword) => {
-        if (userKeywords.includes(keyword)) {
-          score += 20;
-        }
-      });
-      
-      // Add randomness for demo purposes
-      score += Math.floor(Math.random() * 20);
-      
-      const matchPercentage = Math.min(score, 95);
-      
-      return {
-        ...program,
-        matchPercentage,
-        strengths: formData.strengths.slice(0, 3),
+    try {
+      const payload = {
+        baccalaureate_score: parseFloat(formData.baccalaureate_score),
+        previous_years_average: parseFloat(formData.previous_years_average),
+        communication_skills_score: parseInt(formData.communication_skills_score),
+        technical_skills_score: parseInt(formData.technical_skills_score),
+        soft_skills_score: parseInt(formData.soft_skills_score),
+        internship_completed: parseInt(formData.internship_completed),
+        internship_duration_months: parseInt(formData.internship_duration_months),
+        projects_completed: parseInt(formData.projects_completed),
+        portfolio_exists: parseInt(formData.portfolio_exists),
+        linkedin_profile: parseInt(formData.linkedin_profile),
+        teaching_interest: parseInt(formData.teaching_interest),
+        final_average: parseFloat(formData.final_average),
+        has_scholarship: parseInt(formData.has_scholarship),
+        origin_governorate: formData.origin_governorate,
+        baccalaureate_type: formData.baccalaureate_type,
+        scholarship_status: formData.scholarship_status,
+        campus: formData.campus,
+        registration_status: formData.registration_status,
+        english_level: formData.english_level
       };
-    });
 
-    // Sort by match percentage and take top 5
-    const topMatches = matches
-      .sort((a, b) => b.matchPercentage - a.matchPercentage)
-      .slice(0, 5);
-    
-    setResults(topMatches);
-    setShowResults(true);
+      const response = await fetch("http://localhost:8000/api/predict/recommend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get recommendation");
+      }
+
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const tunisianGovernorates = [
+    "Tunis", "Ariana", "Ben Arous", "Manouba", "Nabeul", "Zaghouan", "Bizerte",
+    "Béja", "Jendouba", "Kef", "Siliana", "Kairouan", "Kasserine", "Sidi Bouzid",
+    "Sousse", "Monastir", "Mahdia", "Sfax", "Gafsa", "Tozeur", "Kébili",
+    "Gabès", "Médenine", "Tataouine"
+  ];
+
+  const getProgramColor = (program: string) => {
+    if (program === "STEM") return "bg-blue-600";
+    if (program === "Business") return "bg-green-600";
+    if (program === "Preparatory") return "bg-purple-600";
+    return "bg-gray-600";
+  };
+
+  const getProgramIcon = (program: string) => {
+    if (program === "STEM") return "💻";
+    if (program === "Business") return "📊";
+    if (program === "Preparatory") return "📚";
+    return "🎓";
   };
 
   return (
@@ -172,164 +136,167 @@ export default function ProgramRecommender() {
             Program Recommender
           </h1>
           <p className="text-lg text-white drop-shadow-md">
-            Discover programs that match your interests and career aspirations
+            Get AI-powered program recommendations based on your complete academic profile
           </p>
         </div>
 
-      <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8 mb-8">
-        <form onSubmit={calculateMatches} className="space-y-8">
-          <div>
-            <label className="block text-lg font-semibold text-white mb-4">
-              What are your interests?
-            </label>
-            <div className="grid md:grid-cols-3 gap-3">
-              {interestOptions.map((interest) => (
-                <button
-                  key={interest}
-                  type="button"
-                  onClick={() => toggleInterest(interest)}
-                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
-                    formData.interests.includes(interest)
-                      ? "border-gray-700 font-semibold"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                  style={formData.interests.includes(interest) ? { backgroundColor: '#b20000', color: 'white' } : {}}
-                >
-                  {interest}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-lg font-semibold text-white mb-4">
-              What are your strengths?
-            </label>
-            <div className="grid md:grid-cols-4 gap-3">
-              {strengthOptions.map((strength) => (
-                <button
-                  key={strength}
-                  type="button"
-                  onClick={() => toggleStrength(strength)}
-                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
-                    formData.strengths.includes(strength)
-                      ? "border-gray-700 bg-gray-700 text-white font-semibold"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {strength}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-lg font-semibold text-white mb-2">
-              What's your career goal?
-            </label>
-            <textarea
-              required
-              value={formData.careerGoal}
-              onChange={(e) => setFormData({ ...formData, careerGoal: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              placeholder="Describe your dream job or career path..."
-              rows={3}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center"
-            style={{ backgroundColor: '#b20000' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#8a0000'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
-          >
-            <Sparkles className="h-5 w-5 mr-2" />
-            Get Recommendations
-          </button>
-        </form>
-      </div>
-
-      {showResults && results.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-6">
-            Your Top Program Matches
-          </h2>
-          <div className="space-y-6">
-            {results.map((program, index) => (
-              <div
-                key={program.name}
-                className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-6 border-l-4"
-                style={{
-                  borderLeftColor:
-                    index === 0
-                      ? "#b20000"
-                      : index === 1
-                      ? "#d32f2f"
-                      : "#ff5252",
-                }}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="flex items-center">
-                      <span className="text-3xl font-bold text-gray-400 mr-3">
-                        #{index + 1}
-                      </span>
-                      <h3 className="text-2xl font-bold text-white">
-                        {program.name}
-                      </h3>
-                    </div>
-                    <p className="text-white mt-2">{program.description}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-4xl font-bold" style={{ color: '#b20000' }}>
-                      {program.matchPercentage}%
-                    </div>
-                    <div className="text-sm text-white">Match</div>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div
-                      className="h-3 rounded-full transition-all"
-                      style={{ width: `${program.matchPercentage}%`, backgroundColor: '#b20000' }}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold text-white mb-2">
-                      Your Relevant Strengths:
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {program.strengths.map((strength) => (
-                        <span
-                          key={strength}
-                          className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-                        >
-                          {strength}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white mb-2">
-                      Career Paths:
-                    </h4>
-                    <ul className="text-sm text-white space-y-1">
-                      {program.careerPaths.map((path) => (
-                        <li key={path}>• {path}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Baccalaureate Score (0-20)</label>
+                <input type="number" name="baccalaureate_score" value={formData.baccalaureate_score} onChange={handleInputChange} min="0" max="20" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
               </div>
-            ))}
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Previous Years Average (0-20)</label>
+                <input type="number" name="previous_years_average" value={formData.previous_years_average} onChange={handleInputChange} min="0" max="20" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Final Average (0-20)</label>
+                <input type="number" name="final_average" value={formData.final_average} onChange={handleInputChange} min="0" max="20" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Communication Skills (0-10)</label>
+                <input type="number" name="communication_skills_score" value={formData.communication_skills_score} onChange={handleInputChange} min="0" max="10" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Technical Skills (0-10)</label>
+                <input type="number" name="technical_skills_score" value={formData.technical_skills_score} onChange={handleInputChange} min="0" max="10" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Soft Skills (0-10)</label>
+                <input type="number" name="soft_skills_score" value={formData.soft_skills_score} onChange={handleInputChange} min="0" max="10" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Projects Completed</label>
+                <input type="number" name="projects_completed" value={formData.projects_completed} onChange={handleInputChange} min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Internship Duration (months)</label>
+                <input type="number" name="internship_duration_months" value={formData.internship_duration_months} onChange={handleInputChange} min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Teaching Interest (0-10)</label>
+                <input type="number" name="teaching_interest" value={formData.teaching_interest} onChange={handleInputChange} min="0" max="10" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Origin Governorate</label>
+                <select name="origin_governorate" value={formData.origin_governorate} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required>
+                  <option value="">Select governorate...</option>
+                  {tunisianGovernorates.map(gov => (<option key={gov} value={gov}>{gov}</option>))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Baccalaureate Type</label>
+                <select name="baccalaureate_type" value={formData.baccalaureate_type} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required>
+                  <option value="">Select type...</option>
+                  <option value="Science">Science</option>
+                  <option value="Math">Math</option>
+                  <option value="Technique">Technique</option>
+                  <option value="Letters">Letters</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Campus</label>
+                <select name="campus" value={formData.campus} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required>
+                  <option value="">Select campus...</option>
+                  <option value="Ariana">Ariana</option>
+                  <option value="Tunis Main">Tunis Main</option>
+                  <option value="Monastir">Monastir</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">English Level</label>
+                <select name="english_level" value={formData.english_level} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required>
+                  <option value="">Select level...</option>
+                  <option value="A1">A1 (Beginner)</option>
+                  <option value="A2">A2 (Elementary)</option>
+                  <option value="B1">B1 (Intermediate)</option>
+                  <option value="B2">B2 (Upper Intermediate)</option>
+                  <option value="C1">C1 (Advanced)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">Scholarship Status</label>
+                <select name="scholarship_status" value={formData.scholarship_status} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900" required>
+                  <option value="None">None</option>
+                  <option value="Full Scholarship">Full Scholarship</option>
+                  <option value="Partial Scholarship">Partial Scholarship</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-4 gap-4 pt-4 border-t">
+              <div className="flex items-center">
+                <input type="checkbox" id="internship_completed" checked={formData.internship_completed === "1"} onChange={(e) => setFormData({ ...formData, internship_completed: e.target.checked ? "1" : "0" })} className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded" />
+                <label htmlFor="internship_completed" className="ml-2 block text-sm text-gray-900">Internship Completed</label>
+              </div>
+              <div className="flex items-center">
+                <input type="checkbox" id="portfolio_exists" checked={formData.portfolio_exists === "1"} onChange={(e) => setFormData({ ...formData, portfolio_exists: e.target.checked ? "1" : "0" })} className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded" />
+                <label htmlFor="portfolio_exists" className="ml-2 block text-sm text-gray-900">Has Portfolio</label>
+              </div>
+              <div className="flex items-center">
+                <input type="checkbox" id="linkedin_profile" checked={formData.linkedin_profile === "1"} onChange={(e) => setFormData({ ...formData, linkedin_profile: e.target.checked ? "1" : "0" })} className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded" />
+                <label htmlFor="linkedin_profile" className="ml-2 block text-sm text-gray-900">Has LinkedIn</label>
+              </div>
+              <div className="flex items-center">
+                <input type="checkbox" id="has_scholarship" checked={formData.has_scholarship === "1"} onChange={(e) => setFormData({ ...formData, has_scholarship: e.target.checked ? "1" : "0" })} className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded" />
+                <label htmlFor="has_scholarship" className="ml-2 block text-sm text-gray-900">Has Scholarship</label>
+              </div>
+            </div>
+            <button type="submit" disabled={loading} className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" style={{ backgroundColor: loading ? '#6b7280' : '#b20000' }} onMouseOver={(e) => !loading && (e.currentTarget.style.backgroundColor = '#8b0000')} onMouseOut={(e) => !loading && (e.currentTarget.style.backgroundColor = '#b20000')}>
+              {loading ? (<><Loader2 className="animate-spin mr-2" />Analyzing Your Profile...</>) : (<><Sparkles className="mr-2" />Get Program Recommendation</>)}
+            </button>
+          </form>
         </div>
-      )}
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-8">
+            <p className="font-semibold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {result && (
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="text-center mb-8">
+              <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full ${getProgramColor(result.recommended_program)} mb-4 text-5xl`}>{getProgramIcon(result.recommended_program)}</div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-2">{result.recommended_program}</h2>
+              <p className="text-xl text-gray-600 mb-4">{result.program_details.name}</p>
+              <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${result.confidence === "High" ? "bg-green-100 text-green-800" : result.confidence === "Medium" ? "bg-yellow-100 text-yellow-800" : "bg-gray-100 text-gray-800"}`}>{result.confidence} Confidence • Cluster {result.cluster}</span>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6 mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">About This Program</h3>
+              <p className="text-gray-700 mb-3">{result.program_details.description}</p>
+              <div className="space-y-2">
+                <p className="text-sm text-gray-600"><span className="font-semibold">Examples:</span> {result.program_details.examples}</p>
+                <p className="text-sm text-gray-600"><span className="font-semibold">Best For:</span> {result.program_details.best_for}</p>
+              </div>
+            </div>
+            <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
+              <p className="text-blue-900"><span className="font-semibold">Why this recommendation:</span> {result.explanation}</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {result.student_profile.strengths.length > 0 && (
+                <div className="bg-green-50 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-green-900 mb-3 flex items-center"><span className="inline-block w-2 h-2 bg-green-600 rounded-full mr-2"></span>Your Strengths</h3>
+                  <ul className="space-y-2">{result.student_profile.strengths.map((strength, index) => (<li key={index} className="text-sm text-green-800">✓ {strength}</li>))}</ul>
+                </div>
+              )}
+              {result.student_profile.areas_for_improvement.length > 0 && (
+                <div className="bg-orange-50 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-orange-900 mb-3 flex items-center"><span className="inline-block w-2 h-2 bg-orange-600 rounded-full mr-2"></span>Areas for Improvement</h3>
+                  <ul className="space-y-2">{result.student_profile.areas_for_improvement.map((area, index) => (<li key={index} className="text-sm text-orange-800">→ {area}</li>))}</ul>
+                </div>
+              )}
+            </div>
+            {result.alternative_programs.length > 0 && (
+              <div className="border-t pt-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Alternative Options</h3>
+                <ul className="space-y-2">{result.alternative_programs.map((alt, index) => (<li key={index} className="flex items-start"><span className="inline-flex items-center justify-center w-6 h-6 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold mr-3 mt-0.5 flex-shrink-0">{index + 1}</span><span className="text-gray-700">{alt}</span></li>))}</ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
