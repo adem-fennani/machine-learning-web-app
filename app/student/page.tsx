@@ -20,10 +20,10 @@ export default function StudentPortal() {
       iconColor: "#374151",
     },
     {
-      title: "TA Eligibility Checker",
-      description: "Check your eligibility to become a teaching assistant",
+      title: "Financial Segmentation",
+      description: "View your financial group and understand your scholarship eligibility",
       icon: Users,
-      href: "/student/ta-eligibility",
+      href: "/student/segmentation",
       color: "bg-red-100",
       iconColor: "#b20000",
     },

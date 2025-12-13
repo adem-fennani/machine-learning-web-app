@@ -4,10 +4,10 @@ import { PieChart, TrendingUp, Brain } from "lucide-react";
 export default function AdminPortal() {
   const features = [
     {
-      title: "Financial Segmentation",
-      description: "Analyze student distribution by financial groups and revenue patterns",
+      title: "TA Eligibility Review",
+      description: "Review and assess teaching assistant eligibility for students",
       icon: PieChart,
-      href: "/admin/segmentation",
+      href: "/admin/ta-eligibility",
       color: "bg-gray-100",
       iconColor: "#1f2937",
     },
