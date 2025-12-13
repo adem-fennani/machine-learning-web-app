@@ -26,7 +26,7 @@ class SuccessPredictionService:
             self.scaler = self.model_data['scaler']
             self.train_columns = self.model_data['train_columns']
             self.numeric_cols = self.model_data['numeric_cols']
-            print(f"✅ Success prediction model loaded: Random Forest")
+            print(f"Success prediction model loaded: Random Forest")
         except Exception as e:
             raise RuntimeError(f"Failed to load success model: {str(e)}")
     

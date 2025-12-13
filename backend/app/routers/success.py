@@ -58,7 +58,7 @@ def _generate_recommendations(prediction: str, confidence: str, factors: dict) -
     recommendations = []
     
     if prediction == "At Risk":
-        recommendations.append("🚨 Early intervention recommended")
+        recommendations.append("Early intervention recommended")
         
         # Check specific concerns
         has_score_concern = any("score" in concern.lower() for concern in factors["concerns"])
@@ -66,39 +66,39 @@ def _generate_recommendations(prediction: str, confidence: str, factors: dict) -
         has_age_concern = any("age" in concern.lower() for concern in factors["concerns"])
         
         if has_score_concern:
-            recommendations.append("📚 Priority: Academic strengthening - Your baccalaureate score is the strongest predictor of success")
-            recommendations.append("🎯 Target: Work towards final average ≥ 12/20 (requires strong consistent performance)")
-            recommendations.append("👨‍🏫 Enroll in intensive academic support and tutoring programs")
+            recommendations.append("Priority: Academic strengthening - Your baccalaureate score is the strongest predictor of success")
+            recommendations.append("Target: Work towards final average ≥ 12/20 (requires strong consistent performance)")
+            recommendations.append("Enroll in intensive academic support and tutoring programs")
         
         if has_scholarship_concern:
-            recommendations.append("💰 Apply for financial aid and scholarships to reduce financial stress")
+            recommendations.append("Apply for financial aid and scholarships to reduce financial stress")
         
         if has_age_concern:
-            recommendations.append("🤝 Connect with peer support groups and non-traditional student resources")
+            recommendations.append("Connect with peer support groups and non-traditional student resources")
         
-        recommendations.append("📊 Schedule regular meetings with academic advisor for progress monitoring")
-        recommendations.append("📖 Utilize all available tutoring and study resources")
-        recommendations.append("⏰ Develop strong time management and study habits early")
+        recommendations.append("Schedule regular meetings with academic advisor for progress monitoring")
+        recommendations.append("Utilize all available tutoring and study resources")
+        recommendations.append("Develop strong time management and study habits early")
         
     else:  # Likely to Succeed
         if confidence == "High":
-            recommendations.append("✅ Excellent profile! Your academic foundation predicts strong success")
-            recommendations.append("🌟 Consider leadership and mentoring opportunities to help at-risk peers")
-            recommendations.append("🎓 Explore advanced coursework and research projects")
-            recommendations.append("🏆 Aim for honors and academic excellence programs")
+            recommendations.append("Excellent profile! Your academic foundation predicts strong success")
+            recommendations.append("Consider leadership and mentoring opportunities to help at-risk peers")
+            recommendations.append("Explore advanced coursework and research projects")
+            recommendations.append("Aim for honors and academic excellence programs")
         elif confidence == "Medium":
-            recommendations.append("👍 Good profile with solid success indicators")
-            recommendations.append("📈 Maintain consistent academic performance to stay above 12/20 threshold")
-            recommendations.append("💼 Build practical skills through internships and projects")
-            recommendations.append("🔄 Stay engaged with coursework to maintain your trajectory")
+            recommendations.append("Good profile with solid success indicators")
+            recommendations.append("Maintain consistent academic performance to stay above 12/20 threshold")
+            recommendations.append("Build practical skills through internships and projects")
+            recommendations.append("Stay engaged with coursework to maintain your trajectory")
         else:  # Low confidence
-            recommendations.append("⚠️ Borderline prediction - consistent effort is critical")
-            recommendations.append("📊 Monitor your academic performance closely each semester")
-            recommendations.append("👨‍🏫 Maintain regular contact with academic advisors")
-            recommendations.append("🎯 Focus on maintaining grades above the 12/20 success threshold")
+            recommendations.append("Borderline prediction - consistent effort is critical")
+            recommendations.append("Monitor your academic performance closely each semester")
+            recommendations.append("Maintain regular contact with academic advisors")
+            recommendations.append("Focus on maintaining grades above the 12/20 success threshold")
     
     # Add general recommendations
-    recommendations.append("🌐 Build professional network and LinkedIn presence")
-    recommendations.append("🏢 Participate in campus activities and clubs for holistic development")
+    recommendations.append("Build professional network and LinkedIn presence")
+    recommendations.append("Participate in campus activities and clubs for holistic development")
     
     return recommendations
