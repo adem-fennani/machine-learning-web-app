@@ -362,7 +362,7 @@ export default function StudentTAEligibilityPage() {
                   </div>
                   <div className="flex justify-between mt-2">
                     <p className="text-xs text-gray-400">Required: 70%</p>
-                    <p className="text-xs text-gray-400">{result.probability >= 70 ? '✓ Passed' : 'Not yet'}</p>
+                    <p className="text-xs text-gray-400">{result.probability >= 70 ? 'Passed' : 'Not yet'}</p>
                   </div>
                 </div>
 

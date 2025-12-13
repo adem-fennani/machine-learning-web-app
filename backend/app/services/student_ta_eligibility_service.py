@@ -143,9 +143,9 @@ class StudentTAEligibilityService:
             
             # Generate message
             if employable:
-                message = f"✅ YES - You are eligible for TA positions with {probability:.2f}% confidence"
+                message = f"YES - You are eligible for TA positions with {probability:.2f}% confidence"
             else:
-                message = f"❌ NO - You are not currently eligible. Employability probability: {probability:.2f}%"
+                message = f"NO - You are not currently eligible. Employability probability: {probability:.2f}%"
             
             # Generate recommendations
             recommendations = self._generate_recommendations(student_data, employable, probability)
