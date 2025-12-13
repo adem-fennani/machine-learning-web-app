@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-12-13
+
+### Added
+- **Student Segmentation System**: K-Means clustering for student academic/financial profiling
+  - POST `/api/student/segment` endpoint for individual student segmentation
+  - 3-cluster model: High Performer, Middle Tier, Low Academic Level
+  - Features: baccalaureate score, scholarship status, governorate, chosen program
+  - Cluster interpretations with typical score ranges and scholarship patterns
+  - Personalized recommendations based on cluster assignment
+- **Student Segmentation UI**: Interactive profile analysis form
+  - 4-field input form: bac score (0-20), scholarship status, governorate, program
+  - Color-coded cluster badges (Green: High, Blue: Middle, Orange: Low)
+  - Profile summary displaying all student inputs
+  - Cluster characteristics with typical ranges and common patterns
+  - Personalized guidance messages for academic improvement
+- **Backend Services**: Student segmentation infrastructure
+  - `segmentation_service.py`: K-Means clustering with fallback rule-based logic
+  - Cluster 0: Middle Tier / Partial Scholarship (12-15 bac score)
+  - Cluster 1: Low Academic Level / Self-Funded (10-12 bac score)
+  - Cluster 2: High Performer / High Scholarship Access (15-20 bac score)
+  - `segmentation.py` schema: Request/Response models with validation
+  - `segmentation.py` router: Student API endpoint under `/api/student` prefix
+
+### Changed
+- **Portal Reorganization**: Moved features between student and admin portals
+  - Moved TA Eligibility from `/student/ta-eligibility` to `/admin/ta-eligibility`
+  - Moved Segmentation from `/admin/segmentation` to `/student/segmentation`
+  - Updated Student Portal cards: Dropout Risk, Program Recommender, Segmentation
+  - Updated Admin Portal cards: TA Eligibility Review, Enrollment Forecasting, Performance Prediction
+- Updated API version from 0.5.0 to 0.6.0 in main.py
+- Added segmentation router under `/api/student` prefix
+- Enhanced student portal with clustering-based profile analysis
+
 ## [0.5.0] - 2025-12-13
 
 ### Added

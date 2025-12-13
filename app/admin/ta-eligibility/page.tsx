@@ -1,323 +1,178 @@
 "use client";
 
-import { useState } from "react";
-import { Users, CheckCircle, XCircle, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Users, CheckCircle, TrendingUp, Loader2, BarChart3 } from "lucide-react";
 
 interface EligibilityResult {
-  eligible: boolean;
-  probability: number;
-  score: number;
-  maxScore: number;
-  gaps: string[];
-  recommendations: string[];
+  total_students: number;
+  employable_students: number;
+  employability_rate: number;
+  message: string;
 }
 
 export default function TAEligibility() {
-  const [formData, setFormData] = useState({
-    gpa: "",
-    creditsCompleted: "",
-    courseGrade: "",
-    hasTAExperience: false,
-    hasResearch: false,
-    recommendation: false,
-  });
-  
   const [result, setResult] = useState<EligibilityResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const checkEligibility = (e: React.FormEvent) => {
-    e.preventDefault();
+  const fetchEligibility = async () => {
+    setLoading(true);
+    setError("");
     
-    // Mock ML prediction logic
-    const gpa = parseFloat(formData.gpa);
-    const credits = parseInt(formData.creditsCompleted);
-    const courseGrade = parseFloat(formData.courseGrade);
-    
-    let score = 0;
-    const maxScore = 100;
-    const gaps: string[] = [];
-    const recommendations: string[] = [];
-    
-    // GPA check (30 points) - Tunisian scale 0-20
-    if (gpa >= 16) {  // Excellent (equivalent to 3.5+)
-      score += 30;
-    } else if (gpa >= 14) {  // Good (equivalent to 3.0+)
-      score += 20;
-      gaps.push("Average score below 16/20 (current: " + gpa.toFixed(2) + "/20)");
-      recommendations.push("Work on improving your average score to 16/20 or higher");
-    } else {
-      score += 10;
-      gaps.push("Average score must be at least 14/20 (current: " + gpa.toFixed(2) + "/20)");
-      recommendations.push("Minimum average score requirement is 14/20");
+    try {
+      const response = await fetch("http://localhost:8000/api/admin/eligibility");
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch TA eligibility data");
+      }
+      
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
-    
-    // Credits check (20 points)
-    if (credits >= 60) {
-      score += 20;
-    } else if (credits >= 30) {
-      score += 15;
-      gaps.push("Need more credits (current: " + credits + ", required: 60+)");
-      recommendations.push("Complete at least 60 credits before applying");
-    } else {
-      score += 5;
-      gaps.push("Insufficient credits completed");
-      recommendations.push("You need to complete more coursework");
-    }
-    
-    // Course grade check (25 points) - Tunisian scale 0-20
-    if (courseGrade >= 16) {  // Excellent (equivalent to A)
-      score += 25;
-    } else if (courseGrade >= 14) {  // Good (equivalent to B+/A-)
-      score += 18;
-      gaps.push("Course grade could be higher");
-      recommendations.push("Aim for an excellent grade (16+/20) in the course you want to TA for");
-    } else {
-      score += 10;
-      gaps.push("Course grade too low for TA position");
-      recommendations.push("You typically need a good grade (14+/20) or better in the course");
-    }
-    
-    // Experience (15 points)
-    if (formData.hasTAExperience) {
-      score += 15;
-    } else {
-      gaps.push("No prior TA experience");
-      recommendations.push("Consider volunteering as a peer tutor first");
-    }
-    
-    // Research experience (10 points)
-    if (formData.hasResearch) {
-      score += 10;
-    } else {
-      recommendations.push("Research experience can strengthen your application");
-    }
-    
-    // Faculty recommendation (10 points)
-    if (formData.recommendation) {
-      score += 10;
-    } else {
-      gaps.push("Faculty recommendation letter needed");
-      recommendations.push("Get a strong recommendation from a professor");
-    }
-    
-    const probability = Math.round((score / maxScore) * 100);
-    const eligible = probability >= 70;
-    
-    if (eligible && gaps.length === 0) {
-      recommendations.unshift("You meet all requirements! Submit your application.");
-    }
-    
-    setResult({
-      eligible,
-      probability,
-      score,
-      maxScore,
-      gaps,
-      recommendations,
-    });
   };
+
+  useEffect(() => {
+    fetchEligibility();
+  }, []);
 
   return (
     <div className="min-h-screen bg-cover bg-center bg-no-repeat relative bg-fixed" style={{ backgroundImage: "url('/background_image.png')" }}>
       <div className="absolute inset-0 bg-black/20"></div>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg mb-2 flex items-center">
             <Users className="h-10 w-10 mr-3" style={{ color: '#b20000' }} />
-            TA Eligibility Checker
+            TA Eligibility Dashboard
           </h1>
           <p className="text-lg text-white drop-shadow-md">
-            Check if you qualify to become a teaching assistant
+            Teaching Assistant eligibility predictions for student population
           </p>
         </div>
 
-      <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8 mb-8">
-        <form onSubmit={checkEligibility} className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-200 mb-2">
-                Current Average Score (0 - 20)
-              </label>
-              <input
-                type="number"
-                required
-                min="0"
-                max="20"
-                step="0.01"
-                value={formData.gpa}
-                onChange={(e) => setFormData({ ...formData, gpa: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                placeholder="Enter your average score"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Credits Completed
-              </label>
-              <input
-                type="number"
-                required
-                min="0"
-                max="200"
-                value={formData.creditsCompleted}
-                onChange={(e) => setFormData({ ...formData, creditsCompleted: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                placeholder="Total credits"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Grade in Target Course (0 - 20)
-              </label>
-              <input
-                type="number"
-                required
-                min="0"
-                max="20"
-                step="0.01"
-                value={formData.courseGrade}
-                onChange={(e) => setFormData({ ...formData, courseGrade: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                placeholder="Your grade in the course"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-3 pt-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="taExperience"
-                checked={formData.hasTAExperience}
-                onChange={(e) => setFormData({ ...formData, hasTAExperience: e.target.checked })}
-                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
-                style={{ accentColor: '#b20000' }}
-              />
-              <label htmlFor="taExperience" className="ml-2 block text-sm text-white">
-                I have prior teaching or tutoring experience
-              </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="research"
-                checked={formData.hasResearch}
-                onChange={(e) => setFormData({ ...formData, hasResearch: e.target.checked })}
-                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
-                style={{ accentColor: '#b20000' }}
-              />
-              <label htmlFor="research" className="ml-2 block text-sm text-white">
-                I have research experience
-              </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="recommendation"
-                checked={formData.recommendation}
-                onChange={(e) => setFormData({ ...formData, recommendation: e.target.checked })}
-                className="h-4 w-4 focus:ring-red-600 border-gray-300 rounded"
-                style={{ accentColor: '#b20000' }}
-              />
-              <label htmlFor="recommendation" className="ml-2 block text-sm text-white">
-                I have a faculty recommendation letter
-              </label>
-            </div>
-          </div>
-
+        {/* Action Button */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <button
-            type="submit"
-            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors"
-            style={{ backgroundColor: '#b20000' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#8a0000'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#b20000'}
+            onClick={fetchEligibility}
+            disabled={loading}
+            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            style={{ backgroundColor: loading ? '#6b7280' : '#b20000' }}
+            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#8a0000')}
+            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#b20000')}
           >
-            Check Eligibility
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" />
+                Analyzing Student Population...
+              </>
+            ) : (
+              <>
+                <BarChart3 className="mr-2" />
+                Refresh TA Eligibility Analysis
+              </>
+            )}
           </button>
-        </form>
-      </div>
-
-      {result && (
-        <div className="bg-gray-900/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 p-8">
-          <div className="text-center mb-8">
-            <div
-              className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4`}
-              style={{
-                backgroundColor: result.eligible ? '#f0f0f0' : '#ffe0e0',
-                color: result.eligible ? '#4a4a4a' : '#b20000'
-              }}
-            >
-              {result.eligible ? (
-                <CheckCircle className="h-12 w-12" />
-              ) : (
-                <XCircle className="h-12 w-12" />
-              )}
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-2">
-              {result.eligible ? "Eligible" : "Not Yet Eligible"}
-            </h2>
-            <p className="text-xl text-white">
-              {result.probability}% Match Score
-            </p>
-          </div>
-
-          <div className="mb-8">
-            <div className="flex justify-between mb-2">
-              <span className="text-sm font-medium text-white">
-                Your Score
-              </span>
-              <span className="text-sm font-medium text-white">
-                {result.score} / {result.maxScore}
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-4">
-              <div
-                className="h-4 rounded-full transition-all"
-                style={{ 
-                  width: `${result.probability}%`,
-                  backgroundColor: result.eligible ? '#4a4a4a' : '#b20000'
-                }}
-              />
-            </div>
-          </div>
-
-          {result.gaps.length > 0 && (
-            <div className="mb-8 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                <TrendingUp className="h-5 w-5 mr-2 text-yellow-600" />
-                Gap Analysis
-              </h3>
-              <ul className="space-y-2">
-                {result.gaps.map((gap, index) => (
-                  <li key={index} className="text-gray-700 flex items-start">
-                    <span className="text-yellow-600 mr-2">•</span>
-                    <span>{gap}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Recommendations
-            </h3>
-            <ul className="space-y-3">
-              {result.recommendations.map((rec, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="inline-block w-6 h-6 bg-gray-200 text-gray-700 rounded-full text-center font-semibold text-sm mr-3 mt-0.5">
-                    {index + 1}
-                  </span>
-                  <span className="text-white">{rec}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
-      )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-8">
+            <p className="font-semibold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {/* Results */}
+        {result && (
+          <>
+            {/* Key Metrics */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <Users className="h-8 w-8 text-gray-600" />
+                </div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">
+                  {result.total_students.toLocaleString()}
+                </div>
+                <div className="text-sm text-gray-600">Total Students</div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <CheckCircle className="h-8 w-8" style={{ color: '#10b981' }} />
+                </div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">
+                  {result.employable_students.toLocaleString()}
+                </div>
+                <div className="text-sm text-gray-600">Eligible for TA Positions</div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <TrendingUp className="h-8 w-8" style={{ color: '#b20000' }} />
+                </div>
+                <div className="text-3xl font-bold" style={{ color: '#b20000' }}>
+                  {result.employability_rate.toFixed(2)}%
+                </div>
+                <div className="text-sm text-gray-600">Employability Rate</div>
+              </div>
+            </div>
+
+            {/* Summary Card */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Analysis Summary</h2>
+              
+              <div className="mb-6">
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">
+                    Eligible Students
+                  </span>
+                  <span className="text-sm font-medium text-gray-700">
+                    {result.employable_students} / {result.total_students}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="h-4 rounded-full transition-all"
+                    style={{ 
+                      width: `${result.employability_rate}%`,
+                      backgroundColor: '#10b981'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="p-6 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+                <p className="text-blue-900 font-medium mb-2">Key Insights</p>
+                <p className="text-blue-800">{result.message}</p>
+                <p className="text-blue-700 mt-3 text-sm">
+                  This prediction is based on academic performance, skills assessment, and institutional criteria. 
+                  Eligible students meet the minimum requirements for teaching assistant positions.
+                </p>
+              </div>
+
+              <div className="mt-6 grid md:grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2">Eligible Students</h3>
+                  <p className="text-gray-700">
+                    {result.employable_students} students are predicted to meet the criteria for TA positions, 
+                    including academic performance, communication skills, and subject mastery.
+                  </p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2">Not Eligible Students</h3>
+                  <p className="text-gray-700">
+                    {(result.total_students - result.employable_students).toLocaleString()} students 
+                    may need additional academic development or skill enhancement to qualify for TA roles.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
