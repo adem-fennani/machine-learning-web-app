@@ -123,23 +123,33 @@ class SuccessPredictionService:
         }
     
     def _analyze_factors(self, student_data: Dict[str, Any], success_prob: float) -> Dict[str, Any]:
-        """Analyze which factors contribute to success/risk."""
+        """
+        Analyze which factors contribute to success/risk.
+        
+        Note: The model predicts High_Performer based on final_average >= 12.
+        In the training data, final_average ≈ baccalaureate_score * 0.9 + noise.
+        This means a bacc score of ~13.3+ is needed for high performance.
+        """
         factors = {
             "positive": [],
             "concerns": [],
             "neutral": []
         }
         
-        # Academic strength
+        # Academic strength - adjusted thresholds based on model training
         bacc_score = student_data.get("baccalaureate_score", 0)
         if bacc_score >= 16:
-            factors["positive"].append(f"Excellent baccalaureate score ({bacc_score}/20)")
+            factors["positive"].append(f"Excellent baccalaureate score ({bacc_score}/20) - Strong predictor of success")
         elif bacc_score >= 14:
-            factors["positive"].append(f"Good baccalaureate score ({bacc_score}/20)")
+            factors["positive"].append(f"Very good baccalaureate score ({bacc_score}/20) - Above success threshold")
+        elif bacc_score >= 13.3:
+            factors["positive"].append(f"Good baccalaureate score ({bacc_score}/20) - Meets success threshold")
         elif bacc_score >= 12:
-            factors["neutral"].append(f"Average baccalaureate score ({bacc_score}/20)")
+            factors["concerns"].append(f"Baccalaureate score ({bacc_score}/20) - Below typical success threshold (13.3+)")
+        elif bacc_score >= 10:
+            factors["concerns"].append(f"Low baccalaureate score ({bacc_score}/20) - Significant risk factor")
         else:
-            factors["concerns"].append(f"Low baccalaureate score ({bacc_score}/20)")
+            factors["concerns"].append(f"Very low baccalaureate score ({bacc_score}/20) - High risk")
         
         # Scholarship status
         scholarship = student_data.get("scholarship_status", "")

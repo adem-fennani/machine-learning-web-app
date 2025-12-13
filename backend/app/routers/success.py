@@ -17,8 +17,15 @@ async def predict_success(request: SuccessPredictionRequest):
         # Convert request to dictionary
         student_data = request.model_dump()
         
+        # Debug logging
+        print(f"\n=== API Request Received ===")
+        print(f"Baccalaureate Score: {student_data.get('baccalaureate_score')} (type: {type(student_data.get('baccalaureate_score'))})")
+        print(f"Full request: {student_data}")
+        
         # Get prediction from ML model
         prediction = service.predict(student_data)
+        
+        print(f"Prediction result: {prediction['success_probability']}")
         
         # Generate recommendations
         recommendations = _generate_recommendations(
@@ -41,41 +48,57 @@ async def predict_success(request: SuccessPredictionRequest):
 
 
 def _generate_recommendations(prediction: str, confidence: str, factors: dict) -> list[str]:
-    """Generate personalized recommendations based on prediction."""
+    """
+    Generate personalized recommendations based on prediction.
+    
+    Note: The model uses final_average >= 12 as success threshold.
+    Since final_average ≈ baccalaureate_score * 0.9, students need
+    a bacc score of ~13.3+ to be predicted as high performers.
+    """
     recommendations = []
     
     if prediction == "At Risk":
         recommendations.append("🚨 Early intervention recommended")
         
-        if factors["concerns"]:
-            for concern in factors["concerns"]:
-                if "scholarship" in concern.lower():
-                    recommendations.append("💰 Apply for financial aid and scholarships")
-                if "score" in concern.lower():
-                    recommendations.append("📚 Enroll in academic support programs")
-                if "age" in concern.lower():
-                    recommendations.append("🤝 Connect with peer support groups")
+        # Check specific concerns
+        has_score_concern = any("score" in concern.lower() for concern in factors["concerns"])
+        has_scholarship_concern = any("scholarship" in concern.lower() for concern in factors["concerns"])
+        has_age_concern = any("age" in concern.lower() for concern in factors["concerns"])
         
-        recommendations.append("👨‍🏫 Schedule regular meetings with academic advisor")
-        recommendations.append("📖 Utilize tutoring and study resources")
-        recommendations.append("🎯 Set clear academic goals with milestone tracking")
+        if has_score_concern:
+            recommendations.append("📚 Priority: Academic strengthening - Your baccalaureate score is the strongest predictor of success")
+            recommendations.append("🎯 Target: Work towards final average ≥ 12/20 (requires strong consistent performance)")
+            recommendations.append("👨‍🏫 Enroll in intensive academic support and tutoring programs")
+        
+        if has_scholarship_concern:
+            recommendations.append("💰 Apply for financial aid and scholarships to reduce financial stress")
+        
+        if has_age_concern:
+            recommendations.append("🤝 Connect with peer support groups and non-traditional student resources")
+        
+        recommendations.append("📊 Schedule regular meetings with academic advisor for progress monitoring")
+        recommendations.append("📖 Utilize all available tutoring and study resources")
+        recommendations.append("⏰ Develop strong time management and study habits early")
         
     else:  # Likely to Succeed
         if confidence == "High":
-            recommendations.append("✅ Excellent profile! Continue your strong performance")
-            recommendations.append("🌟 Consider leadership and mentoring opportunities")
+            recommendations.append("✅ Excellent profile! Your academic foundation predicts strong success")
+            recommendations.append("🌟 Consider leadership and mentoring opportunities to help at-risk peers")
             recommendations.append("🎓 Explore advanced coursework and research projects")
+            recommendations.append("🏆 Aim for honors and academic excellence programs")
         elif confidence == "Medium":
-            recommendations.append("👍 Good profile with room for growth")
-            recommendations.append("📈 Focus on maintaining consistent academic performance")
-            recommendations.append("💼 Build skills through internships and projects")
+            recommendations.append("👍 Good profile with solid success indicators")
+            recommendations.append("📈 Maintain consistent academic performance to stay above 12/20 threshold")
+            recommendations.append("💼 Build practical skills through internships and projects")
+            recommendations.append("🔄 Stay engaged with coursework to maintain your trajectory")
         else:  # Low confidence
-            recommendations.append("⚠️ Monitor progress closely")
-            recommendations.append("🔄 Stay engaged with academic advisors")
-            recommendations.append("📊 Track performance metrics regularly")
+            recommendations.append("⚠️ Borderline prediction - consistent effort is critical")
+            recommendations.append("📊 Monitor your academic performance closely each semester")
+            recommendations.append("👨‍🏫 Maintain regular contact with academic advisors")
+            recommendations.append("🎯 Focus on maintaining grades above the 12/20 success threshold")
     
     # Add general recommendations
     recommendations.append("🌐 Build professional network and LinkedIn presence")
-    recommendations.append("🏢 Participate in campus activities and clubs")
+    recommendations.append("🏢 Participate in campus activities and clubs for holistic development")
     
     return recommendations
