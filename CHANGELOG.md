@@ -5,6 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2025-12-13
+
+### Added
+- **Student TA Eligibility Checker**: Individual student TA position eligibility assessment
+  - POST `/api/student/ta-check` endpoint for personalized TA eligibility predictions
+  - 11-field input: academic average, 3 skill scores, internship/portfolio/LinkedIn flags, projects count, teaching interest, English level
+  - Feature engineering: One-hot encoding for English levels (A1, A2, B1, B2, C1, C2)
+  - Fallback prediction: 100-point scoring system (Academic 30%, Skills 30%, Experience 25%, Profile 10%, Teaching 5%)
+  - 70% threshold for employability determination
+  - Personalized recommendations (max 6) based on student weaknesses
+- **Student TA Eligibility UI**: Beautiful form-based eligibility checker
+  - Enhanced form design with grouped sections (Academic Excellence, Skills Assessment, Experience, Professional Profile)
+  - Interactive inputs: number fields, sliders (0-10), checkboxes, dropdown for English level
+  - Beautiful results display: status badge with gradient, animated progress bar, eligibility score
+  - Personalized recommendations with numbered list and hover effects
+  - Loading states with spinner and pulse animations
+  - Background image with translucent dark cards and backdrop blur
+  - Icons for academic section and recommendation badges
+- **Backend Services**: Student TA eligibility infrastructure
+  - `student_ta_eligibility_service.py`: Individual prediction with feature engineering and scoring
+  - `student_ta_eligibility.py` schema: 11-field request model with validation (ge/le constraints)
+  - `student_ta_eligibility.py` router: Student API endpoint with detailed logging
+  - Model fallback logic with rule-based scoring across 5 categories
+
+### Changed
+- Updated Student Portal: Added TA Eligibility Checker card (4th feature)
+- Updated grid layout in student portal from 3 to 4 columns
+- API version remains 0.8.0
+- Enhanced form aesthetics with section grouping and better visual hierarchy
+
+### Fixed
+- NaN errors in number inputs by adding fallback values (`|| 0`)
+- Corrupted JSX structure in form sections
+- Missing opening div tags in Experience and Skills sections
+- Invalid attributes in Professional Profile section
+
+## [0.7.0] - 2025-12-13
+
+### Added
+- **Admin TA Eligibility Dashboard**: Population-level TA eligibility statistics
+  - GET `/api/admin/eligibility` endpoint for institutional TA metrics
+  - Total students analyzed: 5,619
+  - Employable students: 561 (9.98% baseline rate)
+  - CSV export functionality with eligible student list
+  - Metrics cards: Total Students, Employable Students, Employability Rate
+  - Progress bar visualization with percentage indicator
+  - Key insights panel with data-driven recommendations
+- **CSV Export Feature**: Download eligible students data
+  - Export button generates CSV with student IDs, names, and scores
+  - Includes all 561 eligible students from population analysis
+  - Downloadable file: `eligible_students.csv`
+
+### Changed
+- Updated API version from 0.6.0 to 0.7.0 in main.py
+- Added TA eligibility router under `/api/admin` prefix
+- Enhanced admin portal with population-level employability insights
+
 ## [0.6.0] - 2025-12-13
 
 ### Added
