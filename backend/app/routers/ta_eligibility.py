@@ -31,7 +31,8 @@ async def get_ta_eligibility():
             total_students=result["total_students"],
             employable_students=result["employable_students"],
             employability_rate=result["employability_rate"],
-            message=result["message"]
+            message=result["message"],
+            eligible_students_list=result["eligible_students_list"]
         )
         
         logger.info(f"TA eligibility prediction successful: {result['employability_rate']:.2f}% eligible")

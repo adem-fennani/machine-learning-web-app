@@ -61,13 +61,29 @@ class TAEligibilityService:
             
             employability_rate = (employable_students / total_students) * 100
             
+            # Generate simulated list of eligible students
+            # In production, this would be actual student data from database
+            eligible_students_list = []
+            programs = ["Cybersecurity", "Software Engineering", "Data Science", "AI & Machine Learning", 
+                       "Computer Networks", "Information Systems"]
+            
+            for i in range(employable_students):
+                eligible_students_list.append({
+                    "student_id": f"STU{2024000 + i + 1:05d}",
+                    "name": f"Student {i + 1}",
+                    "average_score": round(14.5 + (np.random.random() * 5.5), 2),  # 14.5-20
+                    "program": programs[i % len(programs)],
+                    "eligibility_score": round(70 + (np.random.random() * 30), 2)  # 70-100
+                })
+            
             logger.info(f"TA eligibility prediction: {employable_students}/{total_students} ({employability_rate:.2f}%)")
             
             return {
                 "total_students": total_students,
                 "employable_students": employable_students,
                 "employability_rate": round(employability_rate, 2),
-                "message": f"Predicted {employable_students} out of {total_students} students are eligible for TA positions"
+                "message": f"Predicted {employable_students} out of {total_students} students are eligible for TA positions",
+                "eligible_students_list": eligible_students_list
             }
             
         except Exception as e:

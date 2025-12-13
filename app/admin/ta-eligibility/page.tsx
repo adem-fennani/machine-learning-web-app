@@ -1,13 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, CheckCircle, TrendingUp, Loader2, BarChart3 } from "lucide-react";
+import { Users, CheckCircle, TrendingUp, Loader2, BarChart3, Download } from "lucide-react";
+
+interface EligibleStudent {
+  student_id: string;
+  name: string;
+  average_score: number;
+  program: string;
+  eligibility_score: number;
+}
 
 interface EligibilityResult {
   total_students: number;
   employable_students: number;
   employability_rate: number;
   message: string;
+  eligible_students_list: EligibleStudent[];
 }
 
 export default function TAEligibility() {
@@ -39,6 +48,41 @@ export default function TAEligibility() {
     fetchEligibility();
   }, []);
 
+  const exportToCSV = () => {
+    if (!result || !result.eligible_students_list) return;
+
+    // Create CSV header
+    const headers = ["Student ID", "Name", "Average Score", "Program", "Eligibility Score"];
+    
+    // Create CSV rows
+    const rows = result.eligible_students_list.map(student => [
+      student.student_id,
+      student.name,
+      student.average_score.toString(),
+      student.program,
+      student.eligibility_score.toString()
+    ]);
+
+    // Combine header and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", `eligible_students_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-cover bg-center bg-no-repeat relative bg-fixed" style={{ backgroundImage: "url('/background_image.png')" }}>
       <div className="absolute inset-0 bg-black/20"></div>
@@ -53,28 +97,39 @@ export default function TAEligibility() {
           </p>
         </div>
 
-        {/* Action Button */}
+        {/* Action Buttons */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <button
-            onClick={fetchEligibility}
-            disabled={loading}
-            className="w-full text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-            style={{ backgroundColor: loading ? '#6b7280' : '#b20000' }}
-            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#8a0000')}
-            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#b20000')}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin mr-2" />
-                Analyzing Student Population...
-              </>
-            ) : (
-              <>
-                <BarChart3 className="mr-2" />
-                Refresh TA Eligibility Analysis
-              </>
-            )}
-          </button>
+          <div className="grid md:grid-cols-2 gap-4">
+            <button
+              onClick={fetchEligibility}
+              disabled={loading}
+              className="text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              style={{ backgroundColor: loading ? '#6b7280' : '#b20000' }}
+              onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#8a0000')}
+              onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#b20000')}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin mr-2" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <BarChart3 className="mr-2" />
+                  Refresh Analysis
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={exportToCSV}
+              disabled={!result || loading}
+              className="bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center hover:bg-gray-600"
+            >
+              <Download className="mr-2 h-5 w-5" />
+              Export to CSV
+            </button>
+          </div>
         </div>
 
         {/* Error Message */}
