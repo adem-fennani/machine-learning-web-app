@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-12-13
+
+### Added
+- **Dropout Risk Prediction**: Complete full-stack ML model integration
+  - K-Nearest Neighbors (KNN) classifier for predicting student dropout risk
+  - POST `/api/predict/dropout` endpoint with 13 specialized features
+  - Dropout probability with Low/Medium/High risk classification
+  - Retention probability calculation and confidence scoring
+  - Factor-based analysis (academic performance, skills, professional development)
+- **Dropout Prediction Features**: Advanced student profiling
+  - Academic metrics: baccalaureate score, previous years average
+  - Skills assessment: communication, technical, and soft skills (0-10 scale)
+  - Professional development: projects completed, internship status and duration
+  - Digital presence: portfolio existence, LinkedIn profile
+- **Dropout Risk UI**: Comprehensive prediction interface
+  - 13-field form with specialized inputs for student assessment
+  - Three checkbox inputs for professional profile completion
+  - Risk level visualization with color-coded badges (red/yellow/green)
+  - Dual probability display: dropout risk and retention probability
+  - Categorized factor analysis: positive factors, risk factors, and neutral factors
+  - Context-aware recommendations based on specific risk factors
+- **Backend Services**: Dropout prediction infrastructure
+  - `dropout_service.py`: ML model integration and preprocessing
+  - `dropout.py` schema: Request/response models with field validation
+  - `dropout.py` router: API endpoint with intelligent recommendation engine
+  - Factor analysis engine evaluating 9+ risk/retention indicators
+- **Student Portal**: Added Dropout Risk card to student dashboard
+
+### Changed
+- Updated API version to 0.2.0 in main.py
+- Enhanced student dashboard with dropout prediction feature
+- Improved recommendation system with targeted interventions for high-risk students
+
+### Technical Details
+- Dropout model uses different features than success model (skills-focused vs. enrollment-focused)
+- Model file: `dropout_risk_model(obj1).pkl`
+- Numeric features scaled using StandardScaler
+- Categorical features one-hot encoded (governorate, baccalaureate type)
+
 ## [0.2.0] - 2025-12-13
 
 ### Added
