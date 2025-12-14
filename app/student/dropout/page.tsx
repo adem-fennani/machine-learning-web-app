@@ -60,7 +60,8 @@ export default function DropoutRisk() {
         linkedin_profile: parseInt(formData.linkedin_profile)
       };
 
-      const response = await fetch("http://localhost:8000/api/predict/dropout", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/predict/dropout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

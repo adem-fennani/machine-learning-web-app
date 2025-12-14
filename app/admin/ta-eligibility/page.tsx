@@ -29,7 +29,8 @@ export default function TAEligibility() {
     setError("");
     
     try {
-      const response = await fetch("http://localhost:8000/api/admin/eligibility");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/admin/eligibility`);
       
       if (!response.ok) {
         throw new Error("Failed to fetch TA eligibility data");

@@ -52,7 +52,8 @@ export default function StudentSegmentation() {
     setResult(null);
 
     try {
-      const response = await fetch("http://localhost:8000/api/student/segment", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/student/segment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

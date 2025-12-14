@@ -57,7 +57,8 @@ export default function SuccessPrediction() {
       console.log("Bacc score (raw):", formData.baccalaureate_score);
       console.log("Bacc score (parsed):", payload.baccalaureate_score);
       
-      const response = await fetch("http://localhost:8000/api/predict/success", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/predict/success`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -291,7 +292,7 @@ export default function SuccessPrediction() {
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-lg">
             <p className="text-red-800 font-medium">{error}</p>
-            <p className="text-red-600 text-sm mt-1">Make sure the backend is running on http://localhost:8000</p>
+            <p className="text-red-600 text-sm mt-1">Make sure the backend is running and the API URL is set correctly.</p>
           </div>
         )}
 
