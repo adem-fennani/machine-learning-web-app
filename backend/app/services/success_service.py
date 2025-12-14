@@ -104,12 +104,19 @@ class SuccessPredictionService:
         
         # Determine confidence level
         max_prob = max(probability)
+        
+        # Debug output
+        print(f"Probabilities: [risk={probability[0]:.3f}, success={probability[1]:.3f}]")
+        print(f"Max probability: {max_prob:.3f}")
+        
         if max_prob >= 0.8:
             confidence = "High"
         elif max_prob >= 0.6:
             confidence = "Medium"
         else:
             confidence = "Low"
+        
+        print(f"Confidence: {confidence}")
         
         # Analyze contributing factors
         factors = self._analyze_factors(student_data, success_prob)

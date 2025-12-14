@@ -92,6 +92,18 @@ export default function SuccessPrediction() {
     "Gabès", "Médenine", "Tataouine"
   ];
 
+  const getConfidenceColor = (confidence: string) => {
+    if (confidence === "High") return "bg-green-500";
+    if (confidence === "Medium") return "bg-orange-500";
+    return "bg-red-500";
+  };
+
+  const getMainSectionColor = (confidence: string) => {
+    if (confidence === "High") return "bg-gradient-to-r from-green-500 to-green-600";
+    if (confidence === "Medium") return "bg-gradient-to-r from-orange-500 to-orange-600";
+    return "bg-gradient-to-r from-red-500 to-red-600";
+  };
+
   return (
     <div className="min-h-screen bg-cover bg-center bg-no-repeat relative bg-fixed" style={{ backgroundImage: "url('/background_image.png')" }}>
       <div className="absolute inset-0 bg-black/20"></div>
@@ -287,11 +299,7 @@ export default function SuccessPrediction() {
         {result && (
           <div className="space-y-6">
             {/* Prediction Result */}
-            <div className={`rounded-xl shadow-lg p-8 ${
-              result.success_prediction === "Likely to Succeed" 
-                ? "bg-gradient-to-r from-green-500 to-green-600" 
-                : "bg-gradient-to-r from-yellow-500 to-orange-500"
-            }`}>
+            <div className={`rounded-xl shadow-lg p-8 ${getMainSectionColor(result.confidence)}`}>
               <h2 className="text-3xl font-bold text-white mb-4">
                 {result.success_prediction}
               </h2>
@@ -308,7 +316,7 @@ export default function SuccessPrediction() {
                     {(result.risk_probability * 100).toFixed(1)}%
                   </div>
                 </div>
-                <div className="bg-white/20 rounded-lg p-4">
+                <div className={`rounded-lg p-4 ${getConfidenceColor(result.confidence)}`}>
                   <div className="text-sm opacity-90">Confidence</div>
                   <div className="text-3xl font-bold">{result.confidence}</div>
                 </div>
