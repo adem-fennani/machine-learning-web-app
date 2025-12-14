@@ -30,7 +30,7 @@ app.include_router(student_ta_eligibility.router, prefix="/api/student", tags=["
 async def root():
     return {
         "message": "Stratus ML API",
-        "version": "0.7.0",
+        "version": "0.7.1",
         "endpoints": {
             "success": "/api/predict/success",
             "dropout": "/api/predict/dropout",

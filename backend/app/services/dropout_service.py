@@ -14,7 +14,7 @@ class DropoutPredictionService:
     
     def __init__(self):
         """Initialize the service and load the trained model."""
-        self.model_path = Path(__file__).parent.parent / "models" / "dropout_risk_model (1).pkl"
+        self.model_path = Path(__file__).parent.parent / "models" / "dropout(obj1).pkl"
         self.model_data = None
         self._load_model()
     
@@ -24,9 +24,13 @@ class DropoutPredictionService:
             self.model_data = joblib.load(self.model_path)
             self.model = self.model_data['model']
             self.scaler = self.model_data['scaler']
-            self.train_columns = self.model_data['train_columns']
-            self.numeric_cols = self.model_data['numeric_cols']
+            self.features = self.model_data['features']
+            self.threshold = self.model_data.get('threshold', 0.5)
+            self.meta = self.model_data.get('meta', {})
             print(f"✅ Dropout prediction model loaded successfully")
+            print(f"   Model version: {self.meta.get('sklearn_version', 'unknown')}")
+            print(f"   Features: {len(self.features)}")
+            print(f"   ROC-AUC: {self.meta.get('roc_auc', 'unknown')}")
         except Exception as e:
             raise RuntimeError(f"Failed to load dropout model: {str(e)}")
     
@@ -40,31 +44,23 @@ class DropoutPredictionService:
         Returns:
             DataFrame with preprocessed features matching training format
         """
+        # Extract only the features used by the model
+        feature_data = {feat: student_data.get(feat, 0) for feat in self.features}
+        
         # Create DataFrame from input
-        df = pd.DataFrame([student_data])
+        df = pd.DataFrame([feature_data])
         
-        # Handle numeric columns
-        for col in self.numeric_cols:
-            if col in df.columns:
-                df[col] = df[col].astype(float)
+        # Ensure correct data types (all numeric for this model)
+        for col in df.columns:
+            df[col] = df[col].astype(float)
         
-        # One-hot encode categorical variables
-        df_encoded = pd.get_dummies(df, drop_first=True)
+        # Scale the features
+        df_scaled = pd.DataFrame(
+            self.scaler.transform(df),
+            columns=self.features
+        )
         
-        # Ensure all training columns exist (add missing with 0)
-        for col in self.train_columns:
-            if col not in df_encoded.columns:
-                df_encoded[col] = 0
-        
-        # Keep only training columns in the correct order
-        df_encoded = df_encoded[self.train_columns]
-        
-        # Scale numeric features
-        numeric_indices = [self.train_columns.index(col) for col in self.numeric_cols if col in self.train_columns]
-        if numeric_indices:
-            df_encoded.iloc[:, numeric_indices] = self.scaler.transform(df_encoded.iloc[:, numeric_indices])
-        
-        return df_encoded
+        return df_scaled
     
     def predict(self, student_data: Dict[str, Any]) -> Dict[str, Any]:
         """
