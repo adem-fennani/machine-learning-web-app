@@ -77,7 +77,8 @@ export default function ProgramRecommender() {
         english_level: formData.english_level
       };
 
-      const response = await fetch("http://localhost:8000/api/predict/recommend", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/predict/recommend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
