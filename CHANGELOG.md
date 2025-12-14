@@ -1,4 +1,10 @@
+
 # Changelog
+
+## [1.0.3] - 2025-12-14
+
+### Fixed
+- All frontend API calls now use the environment variable for the backend URL (NEXT_PUBLIC_API_URL) instead of hardcoded localhost URLs. This resolves production connection issues.
 
 ## [1.0.2] - 2025-12-14
 
