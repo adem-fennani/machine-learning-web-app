@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0] - 2025-12-14
+
+### Added
+- Complete ML-powered student analytics web application (Next.js frontend + FastAPI backend)
+- All major features implemented: Dropout Risk Calculator, Program Recommender, TA Eligibility Checker, Financial Segmentation, Enrollment Forecasting, Performance Prediction, and Student Segmentation
+- Unified and improved project documentation (merged backend and frontend READMEs)
+
+### Changed
+- Project structure finalized for deployment (frontend in root, backend in /backend)
+- Updated documentation for deployment and usage instructions
+
+### Fixed
+- General bug fixes and documentation improvements for production readiness
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
