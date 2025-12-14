@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2025-12-14
+
+### Fixed
+- **Dropout Prediction Model**: Updated to new simplified model structure
+  - Removed categorical encoding dependencies (gender, governorate, baccalaureate type)
+  - Model now uses 8 numeric features only
+  - Fixed pickle serialization issues (removed custom temperature_scale function)
+  - Updated preprocessing pipeline to match new model format
+  - Improved model loading with version and performance metadata display
+  - Model achieves 92% ROC-AUC score
+
+### Changed
+- Dropout service backend updated to work with new model structure
+- Features list: baccalaureate_score, previous_years_average, communication_skills_score, technical_skills_score, soft_skills_score, projects_completed, internship_completed, internship_duration_months
+
 ## [0.7.1] - 2025-12-14
 
 ### Added

@@ -5,7 +5,7 @@ from app.routers import success, dropout, recommendation, enrollment, segmentati
 app = FastAPI(
     title="Stratus ML API",
     description="Machine Learning API for Student Success Prediction",
-    version="0.7.0"
+    version="0.7.2"
 )
 
 # CORS - Allow frontend access
@@ -30,7 +30,7 @@ app.include_router(student_ta_eligibility.router, prefix="/api/student", tags=["
 async def root():
     return {
         "message": "Stratus ML API",
-        "version": "0.7.1",
+        "version": "0.7.2",
         "endpoints": {
             "success": "/api/predict/success",
             "dropout": "/api/predict/dropout",
